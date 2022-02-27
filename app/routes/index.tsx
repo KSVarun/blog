@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Link, LinksFunction } from 'remix';
-import indexStyles from './index.css';
+import indexStyles from '../index.css';
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: indexStyles }];
