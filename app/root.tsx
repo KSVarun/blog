@@ -6,8 +6,8 @@ import {
   Scripts,
   ScrollRestoration,
   LinksFunction,
+  MetaFunction,
 } from 'remix';
-import type { MetaFunction } from 'remix';
 import styles from './tailwind.css';
 
 export const links: LinksFunction = () => {
@@ -15,7 +15,7 @@ export const links: LinksFunction = () => {
 };
 
 export const meta: MetaFunction = () => {
-  return { title: 'New Remix App' };
+  return { title: 'A blog by Varun KS' };
 };
 
 export default function App() {
