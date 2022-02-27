@@ -9,7 +9,7 @@ export const links: LinksFunction = () => {
 export default function Index() {
   function imageLoadHander(e: React.SyntheticEvent<HTMLImageElement, Event>) {
     const img = e.target as HTMLImageElement;
-    img.parentElement?.classList.add('image-loaded');
+    img.parentElement?.classList.add('img-loaded');
     img.style.opacity = '1';
   }
 
