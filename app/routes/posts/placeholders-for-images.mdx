@@ -1,0 +1,151 @@
+---
+title: 'Placeholders for images'
+date: '27th Feb, 2022'
+meta:
+  title: 'Placeholders for images'
+  description: 'Placeholders occupy space for a future content, when loading larger images, 
+  placeholders for images plays an important role in better user experience'
+---
+
+import jumpingPage from '../../assets/jumping-page.png';
+import placeholderImage from '../../assets/placeholder-image.png';
+import placeholderLoader from '../../assets/placeholder-loader.png';
+import halfLoaded from '../../assets/half-loaded.png';
+import brokenImage from '../../assets/broken-img.png';
+
+# {attributes.title}
+
+{attributes.date}
+
+<br />
+
+<img src={jumpingPage} alt='jumping-page' />
+
+User experience is a critical factor for a web application,
+having a UI that jumps based on the data load causes bad user experience.
+
+Placeholders reserve space for a future content.
+
+Let's look at some code
+
+```html
+<div class="img-container">
+  <img src="profile-img.jpg" alt="profile-img" class="profile-img" />
+</div>
+```
+
+We have a simple **div** with a class _img-container_ wrapping an **img** tag. Let's add some css
+
+```css
+.img-container {
+  width: 300px;
+  height: 200px;
+}
+
+.profile-img {
+  width: inherit;
+  height: inherit;
+}
+```
+
+With this, the **div** tag acts as a placeholder for the **img** tag and when the image loads the UI won't jump.
+
+<img src={placeholderImage} alt='placeholder-image' />
+
+Having an empty placeholder till the image loads is good, but we can take it one step further.
+Let's show a loading indicator when the image is loading.
+
+### How will I know when the image is loading and when the image has loaded completely?
+
+By default images will start loading as soon as the page loads. So let's add a default loading indicator for our
+image container **div**.
+
+```css
+:root {
+  --placeholder-initial: #eeeeee;
+  --placeholder-final: #cccccc;
+}
+
+.img-container {
+  width: 300px;
+  height: 200px;
+  animation: placeholder ease-in-out 2s infinite;
+}
+
+@keyframes placeholder {
+  0% {
+    background-color: var(--placeholder-initial);
+  }
+  50% {
+    background-color: var(--placeholder-final);
+  }
+  100% {
+    background-color: var(--placeholder-initial);
+  }
+}
+
+.profile-img {
+  width: inherit;
+  height: inherit;
+  opacity: 0;
+}
+```
+
+With this we will get a default loading indicator when the image is loading, notice the `opacity: 0` added
+for _.profile-img_, we will know why that is needed a little bit later.
+
+**img** tag gives a handly event called **onload**, this event will be triggered when the image is loaded completely.
+Let's add it to our js file
+
+```js
+const imageEl = document.querySelector('.profile-img');
+imageEl.onload = function () {
+  imageEl.parentElement.classList.add('image-loaded');
+  imageEl.style.opacity = '1';
+};
+```
+
+<img src={placeholderLoader} alt='placeholder-loader' />
+
+In the above code block, we are adding a class _image-loaded_ to the parent **div** which is the image container and updating the
+opacity of the **img** to 1.
+
+### What is the need for updating the opacity of the img tag?
+
+<img src={halfLoaded} alt='half-loaded-img' />
+
+By default the img will render a part of the image that is downloaded, if the image is loaded 5% then that 5% of the image will be rendered.
+This is again a bad user experience to avoid this, we won't be showing that partially rendered image. Hence 0 opacity is set on _.profile-img_
+and it is updated to **1** in the **onload** event.
+
+There is a chance that an image might fail to load, to handle this **img** tag gives one more handy event called **onerror**.
+
+```js
+imageEl.onerror = function () {
+  imageEl.parentElement.classList.add('image-loaded');
+  imageEl.style.opacity = '1';
+};
+```
+
+<img src={brokenImage} alt='broken-img' />
+
+We are basically doing the same thing when the image loads successfully or when the image fails to load,
+to avoid duplication this can be extraced to a separate function
+
+One last thing is removing animation from the parent **div** image container by updating styles for _image-loaded_ class
+
+```css
+.image-loaded {
+  animation: none;
+}
+```
+
+## References
+
+<ul>
+  <li>
+    <a href='https://web.dev/patterns/web-vitals-patterns/'>
+      Web vitals patterns from web.dev
+    </a>
+  </li>
+</ul>
