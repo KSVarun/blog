@@ -20,9 +20,11 @@ export default function PostsIndex() {
       <div>
         {posts.map((post: any) => (
           <div key={post.slug}>
-            <Link to={post.slug}>{post.title}</Link>
+            <Link to={post.slug} className='text-xl no-underline'>
+              {post.title}
+            </Link>
             {post.description ? (
-              <p className='m-0 lg:m-0'>{post.description}</p>
+              <p className='m-0 lg:m-0 mt-2'>{post.description}</p>
             ) : null}
           </div>
         ))}

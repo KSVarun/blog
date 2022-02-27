@@ -3,8 +3,8 @@ title: 'Placeholders for images'
 date: '27th Feb, 2022'
 meta:
   title: 'Placeholders for images'
-  description: 'Placeholders occupy space for a future content, when loading larger images, 
-  placeholders for images plays an important role in better user experience'
+  description: 'Placeholders reserve space for a future content, when loading larger images, 
+  placeholders for images plays an important role in better user experience.'
 ---
 
 import jumpingPage from '../../assets/jumping-page.png';
@@ -34,7 +34,7 @@ Let's look at some code
 </div>
 ```
 
-We have a simple **div** with a class _img-container_ wrapping an **img** tag. Let's add some css
+We have a **div** with a class _img-container_ wrapping an **img** tag. Let's add some css
 
 ```css
 .img-container {
@@ -108,14 +108,14 @@ imageEl.onload = function () {
 <img src={placeholderLoader} alt='placeholder-loader' />
 
 In the above code block, we are adding a class _image-loaded_ to the parent **div** which is the image container and updating the
-opacity of the **img** to 1.
+opacity of the **img** to **1**.
 
 ### What is the need for updating the opacity of the img tag?
 
 <img src={halfLoaded} alt='half-loaded-img' />
 
 By default the img will render a part of the image that is downloaded, if the image is loaded 5% then that 5% of the image will be rendered.
-This is again a bad user experience to avoid this, we won't be showing that partially rendered image. Hence 0 opacity is set on _.profile-img_
+This is again a bad user experience to avoid this, we won't be showing that partially rendered image. Hence **0** opacity is set on _.profile-img_
 and it is updated to **1** in the **onload** event.
 
 There is a chance that an image might fail to load, to handle this **img** tag gives one more handy event called **onerror**.
