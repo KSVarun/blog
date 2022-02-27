@@ -8,6 +8,8 @@
   align-items: center;
   justify-content: center;
   height: calc(80% - 60px);
+  flex-wrap: wrap;
+  gap: 40px;
 }
 
 .img-container {
@@ -15,11 +17,12 @@
   height: 200px;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 50px;
 }
 
 .profile-details {
   font-size: 40px;
+  display: flex;
+  flex-direction: column;
 }
 
 .helper-text {
@@ -34,4 +37,17 @@
 .profile-img {
   width: inherit;
   height: inherit;
+}
+
+@media screen and (max-width: 599px) {
+  .profile-container {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 389px) {
+  .profile-container {
+    flex-direction: column;
+    padding: 0rem 1rem;
+  }
 }
