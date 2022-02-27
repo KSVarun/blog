@@ -42,9 +42,13 @@ export default function Index() {
         <div className='profile-details '>
           <div>
             Hello 👋, I am{' '}
-            <Link to='https://twitter.com/VarunKS20161856' className='name'>
+            <a
+              href='https://twitter.com/VarunKS20161856'
+              target='_blank'
+              className='name'
+            >
               Varun
-            </Link>
+            </a>
           </div>
           <div className='helper-text'>I love to code</div>
         </div>

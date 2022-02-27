@@ -29,6 +29,7 @@
 
 .name {
   color: #318ce7;
+  cursor: pointer;
 }
 
 @keyframes placeholder {
