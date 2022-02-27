@@ -1,18 +1,13 @@
 import React from 'react';
 import { NavLink, Link, LinksFunction } from 'remix';
 import indexStyles from '../index.css';
+import profileImg from '../assets/profile-img.webp';
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: indexStyles }];
 };
 
 export default function Index() {
-  function imageLoadHander(e: React.SyntheticEvent<HTMLImageElement, Event>) {
-    const img = e.target as HTMLImageElement;
-    img.parentElement?.classList.add('img-loaded');
-    img.style.opacity = '1';
-  }
-
   return (
     <div
       style={{
@@ -31,13 +26,7 @@ export default function Index() {
       </div>
       <div className='profile-container'>
         <div className='img-container'>
-          <img
-            src='https://my-public-imgs.s3.amazonaws.com/profile-img.webp'
-            alt='profile-img'
-            className='profile-img'
-            onLoad={imageLoadHander}
-            onError={imageLoadHander}
-          />
+          <img src={profileImg} alt='profile-img' className='profile-img' />
         </div>
         <div className='profile-details '>
           <div>

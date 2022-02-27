@@ -15,7 +15,6 @@
   height: 200px;
   border-radius: 50%;
   overflow: hidden;
-  animation: placeholder ease-in-out 2s infinite;
   margin-right: 50px;
 }
 
@@ -32,24 +31,7 @@
   cursor: pointer;
 }
 
-@keyframes placeholder {
-  0% {
-    background-color: var(--placeholder-initial);
-  }
-  50% {
-    background-color: var(--placeholder-final);
-  }
-  100% {
-    background-color: var(--placeholder-initial);
-  }
-}
-
 .profile-img {
   width: inherit;
   height: inherit;
-  opacity: 0;
-}
-
-.img-loaded {
-  animation: none;
 }
