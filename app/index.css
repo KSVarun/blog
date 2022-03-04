@@ -29,11 +29,6 @@
   font-weight: 200;
 }
 
-.name {
-  color: #318ce7;
-  cursor: pointer;
-}
-
 .profile-img {
   width: inherit;
   height: inherit;

@@ -1,10 +1,13 @@
-import React from 'react';
-import { NavLink, Link, LinksFunction } from 'remix';
+import { NavLink, LinksFunction } from 'remix';
 import indexStyles from '../index.css';
+import defaultStyles from '../default.css';
 import profileImg from '../assets/profile-img.webp';
 
 export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: indexStyles }];
+  return [
+    { rel: 'stylesheet', href: indexStyles },
+    { rel: 'stylesheet', href: defaultStyles },
+  ];
 };
 
 export default function Index() {
@@ -34,7 +37,7 @@ export default function Index() {
             <a
               href='https://twitter.com/VarunKS20161856'
               target='_blank'
-              className='name'
+              className='link'
             >
               Varun
             </a>

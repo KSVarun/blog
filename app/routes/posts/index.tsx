@@ -1,5 +1,10 @@
-import { LoaderFunction, useLoaderData, Link } from 'remix';
+import { LoaderFunction, useLoaderData, Link, LinksFunction } from 'remix';
+import defaultStyles from '../../default.css';
 import * as placeholdersForImages from './placeholders-for-images.mdx';
+
+export const links: LinksFunction = () => {
+  return [{ rel: 'stylesheet', href: defaultStyles }];
+};
 
 function postsFromModule(mod: any) {
   return {
@@ -20,7 +25,7 @@ export default function PostsIndex() {
       <div>
         {posts.map((post: any) => (
           <div key={post.slug}>
-            <Link to={post.slug} className='text-xl no-underline'>
+            <Link to={post.slug} className='text-xl link'>
               {post.title}
             </Link>
             {post.description ? (
