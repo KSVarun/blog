@@ -2,6 +2,7 @@ import { NavLink, LinksFunction } from 'remix';
 import indexStyles from '../index.css';
 import defaultStyles from '../default.css';
 import profileImg from '../assets/profile-img.webp';
+import { useEffect, useState } from 'react';
 
 export const links: LinksFunction = () => {
   return [
@@ -10,7 +11,34 @@ export const links: LinksFunction = () => {
   ];
 };
 
+const stuffILoveToDo = ['code', 'build things'];
+
 export default function Index() {
+  useEffect(() => {
+    let count = 0;
+    let index = 0;
+    let currentTxt = '';
+    let letter = '';
+
+    (function type() {
+      if (count === stuffILoveToDo.length) {
+        count = 0;
+      }
+      currentTxt = stuffILoveToDo[count];
+      letter = currentTxt.slice(0, ++index);
+
+      const el = document.querySelector('.typing');
+      if (el) {
+        el.textContent = letter;
+      }
+      if (letter.length === currentTxt.length) {
+        count++;
+        index = 0;
+      }
+      setTimeout(type, 300);
+    })();
+  }, []);
+
   return (
     <div
       style={{
@@ -42,7 +70,10 @@ export default function Index() {
               Varun
             </a>
           </div>
-          <div className='helper-text'>I love to code</div>
+          <div className='helper-text'>
+            <span>I love to </span>
+            <span className='typing'></span>
+          </div>
         </div>
       </div>
     </div>

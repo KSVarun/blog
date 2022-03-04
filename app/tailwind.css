@@ -936,11 +936,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-weight: 600;
 }
 
-.no-underline {
-  -webkit-text-decoration-line: none;
-          text-decoration-line: none;
-}
-
 .prose-h1\:mb-0 :is(:where(h1):not(:where([class~="not-prose"] *))) {
   margin-bottom: 0px;
 }
