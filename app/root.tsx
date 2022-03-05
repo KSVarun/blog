@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Links,
   LiveReload,
@@ -25,20 +26,19 @@ export const meta: MetaFunction = () => {
 };
 
 export default function App() {
-  if (typeof document !== 'undefined') {
-    const script = document.createElement('script');
-    script.innerHTML = `if(typeof document !== "undefined"){
-        window.dataLayer = window.dataLayer || []
-      }
-      function gtag(){
-        if(typeof document !== "undefined"){
-          window.dataLayer.push(arguments)
-        }
-      }; 
-      gtag('js', newDate());
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const script = document.createElement('script');
+      script.innerHTML = `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
       gtag('config', 'G-9PRELERZXT');`;
-    document.head.appendChild(script);
-  }
+      document.head.appendChild(script);
+    }
+  }, []);
+
   return (
     <html lang='en'>
       <head>
