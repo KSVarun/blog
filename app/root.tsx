@@ -25,6 +25,20 @@ export const meta: MetaFunction = () => {
 };
 
 export default function App() {
+  if (typeof document !== 'undefined') {
+    const script = document.createElement('script');
+    script.innerHTML = `if(typeof document !== "undefined"){
+        window.dataLayer = window.dataLayer || []
+      }
+      function gtag(){
+        if(typeof document !== "undefined"){
+          window.dataLayer.push(arguments)
+        }
+      }; 
+      gtag('js', newDate());
+      gtag('config', 'G-9PRELERZXT');`;
+    document.head.appendChild(script);
+  }
   return (
     <html lang='en'>
       <head>
@@ -36,11 +50,7 @@ export default function App() {
           async
           src='https://www.googletagmanager.com/gtag/js?id=G-9PRELERZXT'
         ></script>
-        <script>
-          window.dataLayer = window.dataLayer || []; function gtag()
-          {window.dataLayer.push(arguments)}; gtag('js', new Date());
-          gtag('config', 'G-9PRELERZXT');
-        </script>
+        <script></script>
       </head>
       <body>
         <Outlet />
