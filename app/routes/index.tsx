@@ -19,6 +19,7 @@ export default function Index() {
     let index = 0;
     let currentTxt = '';
     let letter = '';
+    let timeout: null | NodeJS.Timeout = null;
 
     (function type() {
       if (count === stuffILoveToDo.length) {
@@ -35,8 +36,13 @@ export default function Index() {
         count++;
         index = 0;
       }
-      setTimeout(type, 300);
+      timeout = setTimeout(type, 300);
     })();
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, []);
 
   return (
