@@ -44,6 +44,12 @@ export default function App() {
       <head>
         <meta charSet='utf-8' />
         <meta name='viewport' content='width=device-width,initial-scale=1' />
+        <meta
+          name='description'
+          content='A blog about the stuff I find interesting'
+        />
+        <meta property='og:title' content='varunks.dev' />
+        <meta property='og:url' content='https://www.varunks.dev' />
         <Meta />
         <Links />
         <script
