@@ -2,9 +2,7 @@ import { NavLink, LinksFunction } from 'remix';
 import indexStyles from '../index.css';
 import defaultStyles from '../default.css';
 import profileImg from '../assets/profile-img.webp';
-import puffSoundEffect from '../assets/puff-sound-effect.mp3';
 import { useEffect, useState } from 'react';
-import { sleep } from '~/utils';
 
 export const links: LinksFunction = () => {
   return [
@@ -12,8 +10,6 @@ export const links: LinksFunction = () => {
     { rel: 'stylesheet', href: defaultStyles },
   ];
 };
-
-const stuffILoveToDo = ['code', 'build things'];
 
 export default function Index() {
   const [showTagLine, setShowTagLine] = useState(false);
@@ -26,16 +22,7 @@ export default function Index() {
     return false;
   }
 
-  function startStrikeOutAnimation() {
-    const ele = document.querySelector('.tag-line-container');
-    ele?.classList.add('strike');
-  }
-
   async function handleRemoveTagLine() {
-    const puffAudio = new Audio(puffSoundEffect);
-    puffAudio.play();
-    startStrikeOutAnimation();
-    await sleep(3500);
     localStorage.setItem('showTagLine', 'false');
     setShowTagLine(false);
   }
