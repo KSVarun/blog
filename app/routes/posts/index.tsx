@@ -21,7 +21,6 @@ export default function PostsIndex() {
   const posts = useLoaderData();
   return (
     <div>
-      <h2>Posts</h2>
       <div>
         {posts.map((post: any) => (
           <div key={post.slug}>
