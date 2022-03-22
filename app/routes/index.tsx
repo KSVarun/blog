@@ -2,6 +2,7 @@ import { NavLink, LinksFunction } from 'remix';
 import indexStyles from '../index.css';
 import defaultStyles from '../default.css';
 import profileImg from '../assets/profile-img.webp';
+import { useEffect, useState } from 'react';
 
 export const links: LinksFunction = () => {
   return [
@@ -13,6 +14,21 @@ export const links: LinksFunction = () => {
 const stuffILoveToDo = ['code', 'build things'];
 
 export default function Index() {
+  const [showTagLine, setShowTagLine] = useState(false);
+
+  function shouldShowTagLine() {
+    const LSVal = localStorage.getItem('showTagLine') || '';
+    if (LSVal === 'true' || !LSVal) {
+      return true;
+    }
+    return false;
+  }
+
+  useEffect(() => {
+    const res = shouldShowTagLine();
+    setShowTagLine(res);
+  }, []);
+
   return (
     <div
       style={{
@@ -50,6 +66,19 @@ export default function Index() {
               Varun
             </a>
           </div>
+          {showTagLine ? (
+            <div
+              onClick={() => {
+                localStorage.setItem('showTagLine', 'false');
+                setShowTagLine(false);
+              }}
+              className='tag-line-container'
+            >
+              <i className='tag-line'>
+                Tag lines are overrated, click to never see me again
+              </i>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

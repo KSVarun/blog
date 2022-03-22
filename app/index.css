@@ -25,8 +25,13 @@
   flex-direction: column;
 }
 
-.helper-text {
-  font-weight: 200;
+.tag-line-container {
+  display: flex;
+  cursor: pointer;
+}
+
+.tag-line {
+  font-size: 15px;
 }
 
 .profile-img {
