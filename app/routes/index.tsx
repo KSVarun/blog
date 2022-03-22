@@ -2,7 +2,9 @@ import { NavLink, LinksFunction } from 'remix';
 import indexStyles from '../index.css';
 import defaultStyles from '../default.css';
 import profileImg from '../assets/profile-img.webp';
+import puffSoundEffect from '../assets/puff-sound-effect.mp3';
 import { useEffect, useState } from 'react';
+import { sleep } from '~/utils';
 
 export const links: LinksFunction = () => {
   return [
@@ -22,6 +24,20 @@ export default function Index() {
       return true;
     }
     return false;
+  }
+
+  function startStrikeOutAnimation() {
+    const ele = document.querySelector('.tag-line-container');
+    ele?.classList.add('strike');
+  }
+
+  async function handleRemoveTagLine() {
+    const puffAudio = new Audio(puffSoundEffect);
+    puffAudio.play();
+    startStrikeOutAnimation();
+    await sleep(3500);
+    localStorage.setItem('showTagLine', 'false');
+    setShowTagLine(false);
   }
 
   useEffect(() => {
@@ -66,19 +82,15 @@ export default function Index() {
               Varun
             </a>
           </div>
-          {showTagLine ? (
-            <div
-              onClick={() => {
-                localStorage.setItem('showTagLine', 'false');
-                setShowTagLine(false);
-              }}
-              className='tag-line-container'
-            >
-              <i className='tag-line'>
-                Tag lines are overrated, click to never see me again
-              </i>
-            </div>
-          ) : null}
+          <div className='tag-line-placeholder'>
+            {showTagLine ? (
+              <div onClick={handleRemoveTagLine} className='tag-line-container'>
+                <i className='tag-line'>
+                  Tag lines are overrated, click to never see me again
+                </i>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

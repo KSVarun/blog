@@ -936,6 +936,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-weight: 600;
 }
 
+.line-through {
+  -webkit-text-decoration-line: line-through;
+          text-decoration-line: line-through;
+}
+
 .prose-h1\:mb-0 :is(:where(h1):not(:where([class~="not-prose"] *))) {
   margin-bottom: 0px;
 }

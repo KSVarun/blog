@@ -30,8 +30,39 @@
   cursor: pointer;
 }
 
+@keyframes strike {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.strike {
+  position: relative;
+}
+.strike::after {
+  content: ' ';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: black;
+  animation-name: strike;
+  animation-duration: 3.5s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
 .tag-line {
   font-size: 15px;
+}
+
+.tag-line-placeholder {
+  height: 21px;
+  width: 349px;
 }
 
 .profile-img {
