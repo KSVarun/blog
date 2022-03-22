@@ -34,21 +34,6 @@
   height: inherit;
 }
 
-.typing::after {
-  content: '';
-  border-right: 3px solid black;
-  animation: blink 1s ease infinite;
-}
-
-@keyframes blink {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 @media screen and (max-width: 599px) {
   .profile-container {
     flex-direction: column;
