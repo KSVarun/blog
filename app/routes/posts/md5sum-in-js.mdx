@@ -1,0 +1,84 @@
+---
+title: 'MD5 in javascript'
+date: '26th March, 2022'
+meta:
+  title: 'MD5 in javascript'
+  description: 'MD5 is an algorithm that generates a 128-bit hash of some data, 
+  which is used to verify the integrity of data.'
+---
+
+# {attributes.title}
+
+{attributes.date}
+
+<br />
+
+[md5sum image here]
+
+MD5 is an algorithm which generates a 128-bit hash, which is used to verify the integrity of data.
+
+When a crital data is shared between two parties, the authenticity of the data needs to be verified,
+wheather the data is corrupted during transit or not.
+
+md5sum is a function that uses MD5 algorithm which generates a 128-bit hash based on the data.
+
+Let's first see how it is done on a terminal, Ubuntu has a built in command _md5sum_ and iOS has _md5_
+
+```bash
+$ echo 'hello world!' | md5sum
+c897d1410af8f2c74fba11b1db511e9e
+```
+
+For the string **hello world!** the 128-bit hash is **c897d1410af8f2c74fba11b1db511e9e**
+
+Now let's compare the result with a node js library [md5](https://www.npmjs.com/package/md5).
+Create a simple package.json with [md5](https://www.npmjs.com/package/md5) as dependency and in a index.js file
+use it to generate md5sum for the string **hello world!**
+
+```js
+{
+  "name": "md5",
+  "version": "1.0.0",
+  "description": "generate md5sum",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "md5": "^2.3.0"
+  }
+}
+```
+
+```js
+const md5sum = require('md5');
+
+console.log(md5sum('hello world!'));
+```
+
+Let's run index.js
+
+```js
+> node index.js
+fc3ff98e8c6a0d3087d515c0473f8677
+```
+
+The hash came out to be **fc3ff98e8c6a0d3087d515c0473f8677** which is completely different than **c897d1410af8f2c74fba11b1db511e9e**
+
+### Why is the hash different?
+
+By default the _echo_ command appends a new line character to the end of strings, so **hello world!** is considered as
+**hello world!\n**. We have to explicitly tell _echo_ to not add new line character at the end. This is done using the _-n_ option
+
+```bash
+$ echo -n 'hello world!' | md5sum
+fc3ff98e8c6a0d3087d515c0473f8677
+```
+
+Now both the hash generated on the terminal and using the node js package are similar.
+
+This is all good for small strings but what about large files.
+
+### How to generate hash for large files?
