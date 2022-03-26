@@ -13,7 +13,9 @@ meta:
 
 <br />
 
-[md5sum image here]
+import md5 from '../../assets/md5.png';
+
+<img src={md5} alt='md5' />
 
 MD5 is an algorithm which generates a 128-bit hash, which is used to verify the integrity of data.
 
@@ -60,8 +62,8 @@ console.log(md5sum('hello world!'));
 
 Let's run index.js
 
-```js
-> node index.js
+```bash
+$ node index.js
 fc3ff98e8c6a0d3087d515c0473f8677
 ```
 
@@ -81,4 +83,62 @@ Now both the hash generated on the terminal and using the node js package are si
 
 This is all good for small strings but what about large files.
 
-### How to generate hash for large files?
+### How to generate hash for files?
+
+Let's create a simple text file named _**greetings.txt**_ and populate it with the string **hello world!**. The hash of the file will be
+
+```bash
+$ md5sum greetings.txt
+c897d1410af8f2c74fba11b1db511e9e
+```
+
+This hash is exactly similar to the hash that was created before when _echo_ command was used without _-n_ option,
+that is because a file will always have an new line appended. Read more [here](https://unix.stackexchange.com/questions/18743/whats-the-point-in-adding-a-new-line-to-the-end-of-a-file)
+
+From the js side the file hash should look something similar
+
+```js
+const md5sum = require('md5');
+const fs = require('fs');
+
+const res = fs.readFileSync('./greetings.txt', { encoding: 'utf8', flag: 'r' });
+console.log(md5sum(res));
+```
+
+```bash
+$ node index.js
+c897d1410af8f2c74fba11b1db511e9e
+```
+
+Yes they are similar as the file the same entity.
+
+Let's consider a use case, there is a requirement to build a file upload service where user selects a file to
+upload from a website and it gets uploaded to a remote server, to find out the integrity of the uploaded file we need to share the MD5 hash.
+
+Should the hash be created using js? The answer is **no**.
+
+Let's figure out why, I will try to generate hash for a large file with size of 300 MB
+
+```js
+const md5sum = require('md5');
+const fs = require('fs');
+
+const res = fs.readFileSync('largeFile.mp4', { encoding: 'utf8', flag: 'r' });
+console.log(md5sum(res));
+```
+
+```bash
+$ node index.js
+../.npm/charenc@0.0.2/node_modules/charenc/charenc.js:6
+      return charenc.bin.stringToBytes(unescape(encodeURIComponent(str)));
+                                                ^
+
+RangeError: Invalid string length
+    at encodeURIComponent (<anonymous>)
+    at Object.stringToBytes (/Users/idks/Developer/test/node_modules/.pnpm/charenc@0.0.2/node_modules/charenc/charenc.js:6:49)
+    ...
+```
+
+It failed because there is a limit to the string length in js. Read more [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/length)
+
+So ideally the browser should not be responsible for creating MD5 hash but rather it's users responsibality to create the hash and share it with a remote server along with the file to verify it's integrity
