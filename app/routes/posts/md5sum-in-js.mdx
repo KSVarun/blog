@@ -15,7 +15,7 @@ meta:
 
 import md5 from '../../assets/md5.png';
 
-<img src={md5} alt='md5' />
+<img src={md5} alt='md5' width='812px' height='268px' />
 
 MD5 is an algorithm which generates a 128-bit hash, which is used to verify the integrity of data.
 
@@ -34,6 +34,7 @@ c897d1410af8f2c74fba11b1db511e9e
 For the string **hello world!** the 128-bit hash is **c897d1410af8f2c74fba11b1db511e9e**
 
 Now let's compare the result with a node js library [md5](https://www.npmjs.com/package/md5).
+
 Create a simple package.json with [md5](https://www.npmjs.com/package/md5) as dependency and in a index.js file
 use it to generate md5sum for the string **hello world!**
 
@@ -81,7 +82,7 @@ fc3ff98e8c6a0d3087d515c0473f8677
 
 Now both the hash generated on the terminal and using the node js package are similar.
 
-This is all good for small strings but what about large files.
+This is all good for small strings but what about files.
 
 ### How to generate hash for files?
 
@@ -110,12 +111,12 @@ $ node index.js
 c897d1410af8f2c74fba11b1db511e9e
 ```
 
-Yes they are similar as the file the same entity.
+Yes they are similar as file is the same entity.
 
 Let's consider a use case, there is a requirement to build a file upload service where user selects a file to
 upload from a website and it gets uploaded to a remote server, to find out the integrity of the uploaded file we need to share the MD5 hash.
 
-Should the hash be created using js? The answer is **no**.
+Should the hash be created in browser? The answer is **no**.
 
 Let's figure out why, I will try to generate hash for a large file with size of 300 MB
 
@@ -141,4 +142,4 @@ RangeError: Invalid string length
 
 It failed because there is a limit to the string length in js. Read more [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/length)
 
-So ideally the browser should not be responsible for creating MD5 hash but rather it's users responsibality to create the hash and share it with a remote server along with the file to verify it's integrity
+So ideally the browser should not be responsible for creating MD5 hash but rather it's the users responsibality to create the hash and share it with a remote server along with the file to verify it's integrity.

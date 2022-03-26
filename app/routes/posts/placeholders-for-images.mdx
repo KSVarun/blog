@@ -19,7 +19,7 @@ import brokenImage from '../../assets/broken-img.png';
 
 <br />
 
-<img src={jumpingPage} alt='jumping-page' />
+<img src={jumpingPage} alt='jumping-page' width='816px' height='305px' />
 
 User experience is a critical factor for a web application,
 having a UI that jumps based on the data load causes bad user experience.
@@ -50,7 +50,12 @@ We have a **div** with a class _img-container_ wrapping an **img** tag. Let's ad
 
 With this, the **div** tag acts as a placeholder for the **img** tag and when the image loads the UI won't jump.
 
-<img src={placeholderImage} alt='placeholder-image' />
+<img
+  src={placeholderImage}
+  alt='placeholder-image'
+  width='816px'
+  height='305px'
+/>
 
 Having an empty placeholder till the image loads is good, but we can take it one step further.
 Let's show a loading indicator when the image is loading.
@@ -105,14 +110,19 @@ imageEl.onload = function () {
 };
 ```
 
-<img src={placeholderLoader} alt='placeholder-loader' />
+<img
+  src={placeholderLoader}
+  alt='placeholder-loader'
+  width='816px'
+  height='305px'
+/>
 
 In the above code block, we are adding a class _image-loaded_ to the parent **div** which is the image container and updating the
 opacity of the **img** to **1**.
 
 ### What is the need for updating the opacity of the img tag?
 
-<img src={halfLoaded} alt='half-loaded-img' />
+<img src={halfLoaded} alt='half-loaded-img' width='816px' height='305px' />
 
 By default the img will render a part of the image that is downloaded, if the image is loaded 5% then that 5% of the image will be rendered.
 This is again a bad user experience to avoid this, we won't be showing that partially rendered image. Hence **0** opacity is set on _.profile-img_
@@ -127,7 +137,7 @@ imageEl.onerror = function () {
 };
 ```
 
-<img src={brokenImage} alt='broken-img' />
+<img src={brokenImage} alt='broken-img' width='816px' height='305px' />
 
 We are basically doing the same thing when the image loads successfully or when the image fails to load,
 to avoid duplication this can be extraced to a separate function
