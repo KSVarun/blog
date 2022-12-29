@@ -1,7 +1,7 @@
 import styles from 'highlight.js/styles/github-dark-dimmed.css';
+import { LinksFunction, Outlet } from 'remix';
+import { Container, Header } from '~/components';
 import postStyles from '../posts.css';
-import { LinksFunction, Outlet, NavLink } from 'remix';
-import { Header, Container } from '~/components';
 
 export const links: LinksFunction = () => {
   return [
