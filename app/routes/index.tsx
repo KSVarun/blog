@@ -1,8 +1,10 @@
-import { NavLink, LinksFunction } from 'remix';
+import { LinksFunction } from 'remix';
 import indexStyles from '../index.css';
 import defaultStyles from '../default.css';
 import profileImg from '../assets/profile-img.webp';
 import { useEffect, useState } from 'react';
+import { Header } from '~/components/Header';
+import { Container } from '~/components/Container';
 
 export const links: LinksFunction = () => {
   return [
@@ -33,21 +35,8 @@ export default function Index() {
   }, []);
 
   return (
-    <div
-      style={{
-        fontFamily: 'system-ui, sans-serif',
-        lineHeight: '1.4',
-        height: '100vh',
-      }}
-    >
-      <header className='text-base font-light px-6 pt-6'>
-        <NavLink to='/' className='mr-3 font-semibold'>
-          Home
-        </NavLink>
-        <NavLink to='/posts' className='mr-3'>
-          Posts
-        </NavLink>
-      </header>
+    <Container>
+      <Header/>
       <main className='profile-container'>
         <section className='img-container'>
           <img
@@ -80,6 +69,6 @@ export default function Index() {
           </aside>
         </section>
       </main>
-    </div>
+    </Container>
   );
 }
