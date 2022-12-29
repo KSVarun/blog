@@ -40,16 +40,16 @@ export default function Index() {
         height: '100vh',
       }}
     >
-      <div className='text-base font-light px-6 pt-6'>
+      <header className='text-base font-light px-6 pt-6'>
         <NavLink to='/' className='mr-3 font-semibold'>
           Home
         </NavLink>
         <NavLink to='/posts' className='mr-3'>
           Posts
         </NavLink>
-      </div>
-      <div className='profile-container'>
-        <div className='img-container'>
+      </header>
+      <main className='profile-container'>
+        <section className='img-container'>
           <img
             src={profileImg}
             alt='profile-img'
@@ -57,8 +57,8 @@ export default function Index() {
             width='inherit'
             height='inherit'
           />
-        </div>
-        <div className='profile-details '>
+        </section>
+        <section className='profile-details'>
           <div>
             Hello 👋, I am{' '}
             <a
@@ -69,7 +69,7 @@ export default function Index() {
               Varun
             </a>
           </div>
-          <div className='tag-line-placeholder'>
+          <aside className='tag-line-placeholder'>
             {showTagLine ? (
               <div onClick={handleRemoveTagLine} className='tag-line-container'>
                 <i className='tag-line'>
@@ -77,9 +77,9 @@ export default function Index() {
                 </i>
               </div>
             ) : null}
-          </div>
-        </div>
-      </div>
+          </aside>
+        </section>
+      </main>
     </div>
   );
 }
