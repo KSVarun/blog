@@ -1,16 +1,6 @@
 import { useEffect, useState } from 'react';
-import { LinksFunction } from 'remix';
 import { Container, Header } from '~/components';
 import profileImg from '../assets/profile-img.webp';
-import defaultStyles from '../default.css';
-import indexStyles from '../index.css';
-
-export const links: LinksFunction = () => {
-  return [
-    { rel: 'stylesheet', href: indexStyles, as: 'style' },
-    { rel: 'stylesheet', href: defaultStyles, as: 'style' },
-  ];
-};
 
 export default function Index() {
   const [showTagLine, setShowTagLine] = useState(false);

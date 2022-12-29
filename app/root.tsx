@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
 import {
   Links,
+  LinksFunction,
   LiveReload,
   Meta,
+  MetaFunction,
   Outlet,
   Scripts,
   ScrollRestoration,
-  LinksFunction,
-  MetaFunction,
 } from 'remix';
+import defaultStyles from './default.css';
+import indexStyles from './index.css';
+import postStyles from './posts.css';
 import styles from './tailwind.css';
-
 declare global {
   interface Window {
     dataLayer: any;
@@ -18,7 +20,12 @@ declare global {
 }
 
 export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: styles }];
+  return [
+    { rel: 'stylesheet', href: styles, as: 'style' },
+    { rel: 'stylesheet', href: indexStyles, as: 'style' },
+    { rel: 'stylesheet', href: postStyles, as: 'style' },
+    { rel: 'stylesheet', href: defaultStyles, as: 'style' },
+  ];
 };
 
 export const meta: MetaFunction = () => {

@@ -1,13 +1,9 @@
 import styles from 'highlight.js/styles/github-dark-dimmed.css';
 import { LinksFunction, Outlet } from 'remix';
 import { Container, Header } from '~/components';
-import postStyles from '../posts.css';
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: 'stylesheet', href: styles },
-    { rel: 'stylesheet', href: postStyles },
-  ];
+  return [{ rel: 'stylesheet', href: styles }];
 };
 
 export default function Posts() {
