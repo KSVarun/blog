@@ -1,7 +1,7 @@
-import { LoaderFunction, useLoaderData, Link, LinksFunction } from 'remix';
+import { Link, LinksFunction, LoaderFunction, useLoaderData } from 'remix';
 import defaultStyles from '../../default.css';
-import * as placeholdersForImages from './placeholders-for-images.mdx';
 import * as md5sumInJs from './md5sum-in-js.mdx';
+import * as placeholdersForImages from './placeholders-for-images.mdx';
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: defaultStyles }];
@@ -21,7 +21,7 @@ export const loader: LoaderFunction = () => {
 
 export default function PostsIndex() {
   const posts = useLoaderData();
-  console.log(posts);
+
   return (
     <div>
       <div>
