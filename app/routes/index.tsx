@@ -3,8 +3,7 @@ import indexStyles from '../index.css';
 import defaultStyles from '../default.css';
 import profileImg from '../assets/profile-img.webp';
 import { useEffect, useState } from 'react';
-import { Header } from '~/components/Header';
-import { Container } from '~/components/Container';
+import { Header, Container } from '~/components';
 
 export const links: LinksFunction = () => {
   return [
@@ -36,7 +35,7 @@ export default function Index() {
 
   return (
     <Container>
-      <Header/>
+      <Header />
       <main className='profile-container'>
         <section className='img-container'>
           <img
