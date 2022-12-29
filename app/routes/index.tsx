@@ -1,14 +1,14 @@
-import { LinksFunction } from 'remix';
-import indexStyles from '../index.css';
-import defaultStyles from '../default.css';
-import profileImg from '../assets/profile-img.webp';
 import { useEffect, useState } from 'react';
-import { Header, Container } from '~/components';
+import { LinksFunction } from 'remix';
+import { Container, Header } from '~/components';
+import profileImg from '../assets/profile-img.webp';
+import defaultStyles from '../default.css';
+import indexStyles from '../index.css';
 
 export const links: LinksFunction = () => {
   return [
-    { rel: 'stylesheet', href: indexStyles },
-    { rel: 'stylesheet', href: defaultStyles },
+    { rel: 'stylesheet', href: indexStyles, as: 'style' },
+    { rel: 'stylesheet', href: defaultStyles, as: 'style' },
   ];
 };
 

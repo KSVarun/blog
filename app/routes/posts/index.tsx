@@ -4,7 +4,7 @@ import * as md5sumInJs from './md5sum-in-js.mdx';
 import * as placeholdersForImages from './placeholders-for-images.mdx';
 
 export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: defaultStyles }];
+  return [{ rel: 'stylesheet', href: defaultStyles, as: 'style' }];
 };
 
 function postsFromModule(mod: any) {
