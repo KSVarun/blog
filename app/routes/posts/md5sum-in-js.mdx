@@ -13,14 +13,14 @@ meta:
 
 <br />
 
-import md5 from '../../assets/md5.png';
+import md5 from "../../assets/md5.png";
 
-<img src={md5} alt='md5' width='812px' height='268px' />
+<img src={md5} alt="md5" width="812px" height="268px" />
 
 MD5 is an algorithm which generates a 128-bit hash, which is used to verify the integrity of data.
 
-When a crital data is shared between two parties, the authenticity of the data needs to be verified,
-wheather the data is corrupted during transit or not.
+When a critical data is shared between two parties, the authenticity of the data needs to be verified,
+weather the data is corrupted during transit or not.
 
 md5sum is a function that uses MD5 algorithm which generates a 128-bit hash based on the data.
 
@@ -56,9 +56,9 @@ use it to generate md5sum for the string **hello world!**
 ```
 
 ```js
-const md5sum = require('md5');
+const md5sum = require("md5");
 
-console.log(md5sum('hello world!'));
+console.log(md5sum("hello world!"));
 ```
 
 Let's run index.js
@@ -99,10 +99,10 @@ that is because a file will always have an new line appended. Read more [here](h
 From the js side the file hash should look something similar
 
 ```js
-const md5sum = require('md5');
-const fs = require('fs');
+const md5sum = require("md5");
+const fs = require("fs");
 
-const res = fs.readFileSync('./greetings.txt', { encoding: 'utf8', flag: 'r' });
+const res = fs.readFileSync("./greetings.txt", { encoding: "utf8", flag: "r" });
 console.log(md5sum(res));
 ```
 
@@ -121,10 +121,10 @@ Should the hash be created in browser? The answer is **no**.
 Let's figure out why, I will try to generate hash for a large file with size of 300 MB
 
 ```js
-const md5sum = require('md5');
-const fs = require('fs');
+const md5sum = require("md5");
+const fs = require("fs");
 
-const res = fs.readFileSync('largeFile.mp4', { encoding: 'utf8', flag: 'r' });
+const res = fs.readFileSync("largeFile.mp4", { encoding: "utf8", flag: "r" });
 console.log(md5sum(res));
 ```
 

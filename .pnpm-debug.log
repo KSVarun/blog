@@ -3,12 +3,20 @@
     "selected": 1
   },
   "1 error pnpm": {
-    "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+    "code": "ELIFECYCLE",
+    "errno": "ENOENT",
+    "syscall": "spawn",
+    "file": "sh",
+    "pkgid": "remix-app-template@",
+    "stage": "dev",
+    "script": "concurrently \"npm run dev:css\" \"remix dev\"",
+    "pkgname": "remix-app-template",
     "err": {
       "name": "pnpm",
-      "message": "No package.json (or package.yaml, or package.json5) was found in \"/Users/idks/Developer/blogs\".",
-      "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
-      "stack": "pnpm: No package.json (or package.yaml, or package.json5) was found in \"/Users/idks/Developer/blogs\".\n    at readProjectManifest (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:19805:13)\n    at async Object.readProjectManifestOnly (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:19809:28)\n    at async readProjectManifestOnly (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:43712:24)\n    at async Object.handler (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:177793:24)\n    at async /usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:182056:21\n    at async run (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:182030:34)\n    at async runPnpm (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:182249:5)\n    at async /usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:182241:7"
+      "message": "remix-app-template@ dev: `concurrently \"npm run dev:css\" \"remix dev\"`\nspawn ENOENT",
+      "code": "ELIFECYCLE",
+      "stack": "pnpm: remix-app-template@ dev: `concurrently \"npm run dev:css\" \"remix dev\"`\nspawn ENOENT\n    at ChildProcess.<anonymous> (/Users/varun/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:92254:22)\n    at ChildProcess.emit (node:events:390:28)\n    at maybeClose (node:internal/child_process:1064:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:301:5)"
     }
-  }
+  },
+  "2 warn pnpm:global": " Local package.json exists, but node_modules missing, did you mean to install?"
 }
