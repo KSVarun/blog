@@ -31,16 +31,16 @@ Our goal is to use computer vision to detect a person’s posture and determine 
   }}
 >
   _Before we dive in to the code, we need to be mindful about the security and
-  privacy, since we are using webcam to detect the posture, other applications
-  who have access to webcam can make use of it, we have to check the necessary
-  permissions of the webcam to make sure we are safe._
+  privacy aspects, since we are using webcam to detect the posture, other
+  applications who have access to webcam can make use of it, we have to check
+  the necessary permissions of the webcam to make sure we are safe._
 </div>
 
 <br />
 
 ## Prerequisites
 
-Before we dive into the code, make sure you have the following installed, using <a href="https://docs.python.org/3/library/venv.html" target="_blank">venv</a> is highly recommended
+Before we dive into the code, we need to make sure below packages are installed, using <a href="https://docs.python.org/3/library/venv.html" target="_blank">venv</a> is highly recommended
 
 - Python (version 3.6+)
 - OpenCV (pip install opencv-python)
@@ -74,7 +74,7 @@ mp_drawing = mp.solutions.drawing_utils
 ```
 
 Here, we set up the MediaPipe Pose object with the desired configurations. Keeping in mind the memory consumption the configurations used here does not bring out complete features of MediaPipe,
-even with this I was able to produce accurate results every time.
+even with this lesser configuration the results were accurate every time.
 
 - **static_image_mode=False**: For video input.
 - **model_complexity=0**: A simpler model to save computation resources.
@@ -95,12 +95,60 @@ def calculate_angle(a, b, c):
     return angle
 ```
 
-**calculate_angle** function computes the angle between three points (in 2D space) to check the posture. The first three lines of the function converts the points to NumPy arrays for easier mathematical calculations,
+_**calculate_angle(a,b,c)**_ function computes the angle between three points in 2D space to check the posture. We will explore more about the 3 parameters a,b and c later in the post. The first three lines of the function converts the points to NumPy arrays for easier mathematical calculations,
 in the next two lines we use trigonometry (<a href="https://numpy.org/doc/2.0/reference/generated/numpy.arctan2.html#numpy.arctan2" target="_blank">arctan2</a>) to calculate the angle in radians and converts it to degrees and finally we adjust the angle to always be between 0 and 180 degrees.
 
 The angle should be between 0 and 180 degrees because it represents the measurement between two vectors formed by three points (in our case, the coordinates of body landmarks like shoulders and nose).
-When calculating angles using vectors, the output can range from 0 to 360 degrees. However, in the context of posture detection, angles greater than 180 degrees don't make physical sense for evaluating the alignment of the body. A posture angle will always be in the range of 0 to 180 degrees since the human body cannot naturally fold backward beyond 180 degrees in this scenario.
+When calculating angles using vectors, the output can range from 0 to 360 degrees. However, in the context of posture detection, angle greater than 180 degrees don't make physical sense for evaluating the alignment of the body. A posture angle will always be in the range of 0 to 180 degrees since the human body cannot naturally fold backward beyond 180 degrees in this scenario.
 
 Also limiting the angle to a 0-180 degree range simplifies the analysis and interpretation of the posture. If the angle exceeds 180 degrees, we take the complement (360 - angle) to ensure we're measuring the smaller angle between the two vectors, which is more relevant for posture assessment.
 
 Hence, by keeping the angle between 0 and 180 degrees, we can accurately determine whether someone is slouching or sitting straight.
+
+### 4. Initialize webcam and other necessary variables
+
+```python
+lower_angle_limit = 38
+upper_angle_limit = 44
+
+capture = cv2.VideoCapture(0)
+```
+
+**lower_angle_limit** and **upper_angle_limit** are the angle between the 3 points, two shoulders points and nose. **cv2.VideoCapture(0)** is used to capture the video throw the webcam
+
+### 5. While loop for processing the video
+
+```python
+while capture.isOpened():
+    ret, frame = capture.read()
+    if not ret:
+        break
+
+    image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = pose.process(image)
+    if results.pose_landmarks:
+        mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+
+        landmarks = results.pose_landmarks.landmark
+
+        shoulder_left = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER].x,
+                         landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER].y]
+        shoulder_right = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER].x,
+                          landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER].y]
+        nose = [landmarks[mp_pose.PoseLandmark.NOSE].x, landmarks[mp_pose.PoseLandmark.NOSE].y]
+
+        angle = calculate_angle(shoulder_left, nose, shoulder_right)
+
+        if angle > upper_angle_limit or angle < lower_angle_limit:
+          cv2.putText(image, "Sit Straight!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+    cv2.imshow("Posture Detection", image)
+    if cv2.waitKey(10) & 0xFF == ord('q'):
+        break
+```
+
+From the capture we check if the webcam is opened, _**capture.isOpened()**_ returns **True** if the webcam is opened and **False** otherwise.
+**ret** and **frame** are output of _**capture.read()**_, **ret** is a boolean which will be **True** if the OpenCV library is able to capture the next frame, **False** otherwise and **frame** is the next frame that is captured, it is the **NumPy array** if the frame is successfully read or **None** if **ret** is **False**. Hence we are exiting if **ret** is **False**.
+
+_**cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)**_ is used to covert the **frame** to RGB format, as media pipe requires the image to be in RGB, by default OpenCV captures the image in BGR format. It is then processed _**pose.process(image)**_
+and if the results of the processing has **pose_landmarks** we proceed with our calculation.
