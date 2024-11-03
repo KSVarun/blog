@@ -221,8 +221,6 @@ import Quartz
 ...
 ...
 def is_screen_locked():
-    """Check if the screen is locked (display is off)."""
-    # Get display status using psutil
     d = Quartz.CGSessionCopyCurrentDictionary()
     if 'CGSSessionScreenIsLocked' in d.keys():
         return True
