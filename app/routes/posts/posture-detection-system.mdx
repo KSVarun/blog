@@ -32,7 +32,7 @@ Our goal is to use computer vision to detect a person’s posture and determine 
 >
   _Before we dive in to the code, we need to be mindful about the security and
   privacy aspects, since we are using webcam to detect the posture, other
-  applications who have access to webcam can make use of it, we have to check
+  applications who have access to webcam can make use of it, we need to check
   the necessary permissions of the webcam to make sure we are safe._
 </div>
 
@@ -114,7 +114,8 @@ upper_angle_limit = 44
 capture = cv2.VideoCapture(0)
 ```
 
-**lower_angle_limit** and **upper_angle_limit** are the angle between the 3 points, two shoulders points and nose. **cv2.VideoCapture(0)** is used to capture the video throw the webcam
+**lower_angle_limit** and **upper_angle_limit** are the angle between the 3 points, two shoulders points and nose. We need to change these values based on our conditions, like placement of webcam, sitting position etc.
+**cv2.VideoCapture(0)** is used to capture the video throw the webcam
 
 ### 5. While loop for processing the video
 
@@ -140,7 +141,7 @@ while capture.isOpened():
         angle = calculate_angle(shoulder_left, nose, shoulder_right)
 
         if angle > upper_angle_limit or angle < lower_angle_limit:
-          cv2.putText(image, "Sit Straight!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+          cv2.putText(image, "Sit straight!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
     cv2.imshow("Posture Detection", image)
     if cv2.waitKey(10) & 0xFF == ord('q'):
@@ -152,3 +153,107 @@ From the capture we check if the webcam is opened, _**capture.isOpened()**_ retu
 
 _**cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)**_ is used to covert the **frame** to RGB format, as media pipe requires the image to be in RGB, by default OpenCV captures the image in BGR format. It is then processed _**pose.process(image)**_
 and if the results of the processing has **pose_landmarks** we proceed with our calculation.
+
+_**mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)**_ is function provided by MediaPipe's drawing utility, it takes an image and draws landmarks and connections (like a skeleton) to illustrate key points on the body and how they are connected.
+**image** is the image/frame on which we want to draw the landmarks and pose connections. **results.pose_landmarks** contains the detected pose landmarks, which are key points on the human body such as the nose, shoulders, elbows, hips, knees, etc. It will have the coordinates (x, y, z) of each key point, which are used to draw the landmarks.
+**mp_pose.POSE_CONNECTIONS** is a predefined set of connections that specify how the landmarks are connected to form a human skeleton, it defines which points are connected to represent arms, legs, the torso, etc.
+
+[ADD IMAGE OF POSE LANDMARKS]
+
+From the landmarks we get **shoulder_left**, **shoulder_right** and **nose** which are the python lists containing the x and y coordinates of the respective body landmarks.
+These are provided to the _**calculate_angle(shoulder_left, nose, shoulder_right)**_ function to get the angle, it measures the angle at the nose between the lines connecting shoulder_left to nose and nose to shoulder_right. This configuration makes sense because we are interested in how the person's posture is positioned relative to the nose, as it gives a natural orientation for posture analysis.
+
+In the next if condition based on the angle we show a text on the image "Sit straight!". We can change the **upper_angle_limit** and **lower_angle_limit** values based on our conditions, like placement of webcam, sitting position etc. We can print the angle to the console and move the webcam or ourselves to the best posture position and based on the angle value we can update the upper and lower limits
+
+[ADD IMAGE OF SIT STRAIGHT TEXT]
+
+In the **if cv2.waitKey(10) & 0xFF == ord('q'):** condition we are checking if user presses **q** key, if the key is pressed we quit the program
+
+## Enhancements
+
+With the above logic we are able to identify the posture and show a text on the video "Sit straight!", but in a real world use case this is not user friendly, a user won't be looking at the video all the time to check the
+"Sit straight!" text and correct the posture and rendering the video all the time will consume memory, we will work on memory consumption later in the post.
+
+### 1. Using sound instead of the text
+
+In real world use case it makes to have a specific sound played when we move out of posture, this can be easily achieved with use the os module, we import the os module and using **afplay** command line utility we play the sound. **afplay** works on mac, we can use respective utility on different systems to achieve the same.
+
+```python
+import os
+...
+...
+while cap.isOpened():
+  ...
+  ...
+  if results.pose_landmarks:
+    ...
+    ...
+    if angle > upper_angle_limit or angle < lower_angle_limit:
+      os.system('afplay ./sound.wav')
+    ...
+    ...
+```
+
+We have to replace **cv2.putText(image, "Sit straight!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)** with **os.system('afplay ./posture-alert.wav')**, this is a blocking call, that means until the full sound is played the loop won't continue, recommendation is use to a sound which is less than 1 sec in duration.
+
+### 2. Exiting the program when the screen is locked
+
+With the above code the program will keep on running even when we lock the screen, which is not needed, we can detect the screen lock and end the program. On mac we have **Quartz** module which will help in that.
+
+```python
+import Quartz
+...
+...
+def is_screen_locked():
+    """Check if the screen is locked (display is off)."""
+    # Get display status using psutil
+    d = Quartz.CGSessionCopyCurrentDictionary()
+    if 'CGSSessionScreenIsLocked' in d.keys():
+        return True
+    return False
+...
+...
+while cap.isOpened():
+    if is_screen_locked():
+        print("Screen is locked. Exiting...")
+        break
+    ...
+    ...
+```
+
+After the while we will check if the screen is locked and break out of the program. To start the program again multiple ways can be used, based on our comfort that can be achieved, leaving that out now as that will complicate this post.
+
+### 3. Reducing the memory usage
+
+- **Closing the video playback**. Playing the video along in the foreground won't help in anyway once we figure out the upper and lower angles, so it makes sense to not the play the video and reduce some memory consumption. We can remove **cv2.imshow("Posture Detection", image)** to achieve this.
+
+- **Reducing the resolution of the video captured**. After we get the **capture = cv2.VideoCapture(0)** we can use the below code to set the resolution. The below code will capture the video in 240p resolution. If we decide to go with this we also need to alter the upper and lower limit angle.
+
+```python
+...
+...
+capture = cv2.VideoCapture(0)
+capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+capture.set(cv2.CAP_PROP_FRAME_WIDTH, 426)
+...
+...
+```
+
+- **Run the processing on every 30th loop**. Currently we run the processing on every loop which can be memory intensive, we can reduce this by running the processing on every 30th loop or 60th loop based on our use case.
+
+```python
+...
+...
+loop_counter = 0
+loop_skip_interval = 30
+...
+...
+while cap.isOpened():
+  ...
+  ...
+  loop_counter += 1
+  if loop_counter % loop_skip_interval != 0:
+      continue
+  ...
+  ...
+```
