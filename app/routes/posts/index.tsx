@@ -2,6 +2,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/server-runtime";
 import * as md5sumInJs from "./md5sum-in-js.mdx";
 import * as placeholdersForImages from "./placeholders-for-images.mdx";
+import * as postureDetectionSystem from "./posture-detection-system.mdx";
 
 function postsFromModule(mod: any) {
   return {
@@ -12,7 +13,11 @@ function postsFromModule(mod: any) {
 }
 
 export const loader: LoaderFunction = () => {
-  return [postsFromModule(placeholdersForImages), postsFromModule(md5sumInJs)];
+  return [
+    postsFromModule(placeholdersForImages),
+    postsFromModule(md5sumInJs),
+    postsFromModule(postureDetectionSystem),
+  ];
 };
 
 export default function PostsIndex() {
