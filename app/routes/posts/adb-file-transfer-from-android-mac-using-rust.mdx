@@ -1,0 +1,332 @@
+---
+title: 'Building a rust CLI for transferring data from android to mac'
+date: '9th August, 2025'
+meta:
+  title: 'Building a rust CLI for transferring data from android to mac'
+  description: 'A Rust-powered CLI tool that lets you browse your Android device’s file system via ADB, select multiple files or folders, and securely transfer them to your Mac with real-time progress tracking.
+Built to fill the gap for a fast, reliable, and user-controlled alternative to clunky or insecure Android–Mac file transfer solutions.'
+---
+
+# {attributes.title}
+
+{attributes.date}
+
+<br />
+<br />
+
+# TL;DR
+
+Built a rust command-line tool that
+
+- lets you browse an Android device (via `adb`),
+- mark files/folders across multiple directories,
+- and pull all marked items to a destination on your Mac with per-file and overall progress bars.
+
+Why? Because out-of-the-box cross-platform file transfer options are often inconvenient, insecure, or impossible for advanced workflows. This CLI gives an auditable, scriptable, and local-only solution that developers and power users can control.
+
+---
+
+# Motivation — why this CLI exists
+
+There are several ways to move files from Android to a Mac (MTP, cloud services, GUI apps, AirDrop-like web apps, AirDroid, etc.). But they often fall short for power users who want any of the following
+
+- scriptable command-line workflows,
+- reproducible, auditable transfers that don’t go through a cloud provider,
+- selective multi-folder batch pulls without manually copying dozens of paths,
+- direct control over what is pulled and when (and a log to show it),
+- or simply tools that work reliably when the device is connected to a machine over USB.
+
+`adb` (Android Debug Bridge) is available on nearly every developer device and grants powerful access to the device filesystem (subject to permissions). This CLI leverages `adb` but wraps it in a friendly interactive UX (navigation, marking, progress) in Rust — fast and distributable as a single binary.
+
+<div
+  style={{
+    background: "gainsboro",
+    padding: "1px 25px 1px 25px",
+    borderRadius: "10px",
+    fontWeight: 600,
+  }}
+>
+  _Enabling USB debugging is a risk if left on. But for the short, intentional
+  purpose of copying files while you control both ends, using ADB over USB is
+  often preferable to uploading files to a cloud service or using third-party
+  apps that require broad permissions._
+</div>
+
+---
+
+# High-level architecture
+
+1. The CLI runs on the Mac. It invokes `adb` (which must be installed on the Mac).
+2. For browsing, we run `adb shell ls -p <path>` and parse the output to get clean file/folder names.
+3. The user navigates directories via an interactive menu (dialoguer).
+4. The user can “mark” files/folders across directories. Those selections are stored in-memory.
+5. When ready, the user triggers a pull: for each marked item we run `adb pull <src> <dest>`.
+6. While pulling, we parse `adb` stderr for progress percentages and update an `indicatif` progress bar per file; an overall progress bar counts completed files.
+7. Successful pulls are logged to a local log file (timestamped entries).
+
+---
+
+# ADB — deep dive (what it is and how we use it)
+
+`adb` (Android Debug Bridge) is an executable bundled with Android platform-tools. It implements a client/server/daemon architecture
+
+- **adb client**: invoked by you on the host machine (e.g., `adb pull`).
+- **adb server**: a background process on the host that manages connections.
+- **adbd (daemon)**: runs on the Android device and handles commands from the host.
+
+Connections usually go over USB, but `adb` can also operate over TCP (adb tcpip), which has additional risks. When a new host attempts to connect, the device displays an RSA fingerprint prompt — you must explicitly allow the host. This prevents silent connections from unknown hosts.
+
+Important ADB facts relevant to the CLI
+
+- `adb shell ls -p <path>` runs an `ls` on the device and returns lines with names; directories end with `/` when `-p` is used. We parse this output to show users clean names.
+- `adb pull <remote> <local>` fetches a file or directory. It prints progress information to `stderr` on many devices (percent values like `12%`), which we can parse to build a progress bar.
+- `adb` honors quoted/space-containing filenames if passed as a single process arg (we avoid shell quoting; we call `Command::new(...).args([...])`).
+- Permission constraints apply: protected directories (e.g., `/data`) are inaccessible without root or special privileges.
+
+<div
+  style={{
+    background: "gainsboro",
+    padding: "1px 25px 1px 25px",
+    borderRadius: "10px",
+    fontWeight: 600,
+  }}
+>
+  _Only enable USB debugging for short periods while you copy your files.
+  Disable it afterwards. Always check the device for the RSA authorization
+  prompt before enabling operations._
+</div>
+
+---
+
+# Important design choices & why
+
+- **Rust**: single static binary, performance, good ecosystem for CLIs.
+- **dialoguer**: interactive menus and multi-select in the terminal, consistent UI.
+- **indicatif**: well-established progress bar library.
+- **clap**: argument parsing (start path, destination).
+- **regex**: robust parsing of percent values from `adb` stderr.
+- **`adb` as the transport**: local, avoids cloud; readily available for developers.
+
+---
+
+# Key implementation details
+
+Below are the crucial functions and why they’re implemented that way.
+
+## `adb_list_files(path: &str) -> Vec<String>`
+
+Purpose: return a clean list of entries (files and directories) in a given Android directory.
+
+Implementation pattern:
+
+```rust
+let output = Command::new("adb")
+    .args(["shell", &format!("ls -p {}", path)])
+    .output()
+    .expect("Failed to run `adb shell ls`");
+
+String::from_utf8_lossy(&output.stdout)
+    .lines()
+    .map(|s| s.trim().to_string())
+    .filter(|s| !s.is_empty())
+    .collect()
+```
+
+Why `ls -p`?
+
+- `ls -p` appends a `/` to directory names and prints only the names (rather than the long `ls -l` format with permissions and owner). That makes parsing robust — we avoid slicing the long `ls -l` columns which can fail with spaces, localized date formats, etc.
+
+Caveats:
+
+- Filenames can contain newlines or other strange bytes; `ls` will generally escape or present them, but handling extreme edge cases would require `find -print0` + null splitting. `ls -p` is pragmatic and reliable for common use.
+
+## `join_android_path(dir: &str, name: &str) -> String`
+
+Purpose: combine a current directory and an entry name into the correct remote path.
+
+Important to trim trailing slashes properly so `/` + `Name/` becomes `/Name`, etc. We always pass this as a single argument to `Command::args`, so spaces in filenames are handled.
+
+## `pull_with_progress(src: &str, dest: &PathBuf, log_file: &mut File) -> bool`
+
+Purpose: run `adb pull <src> <dest>` and show a useful per-file progress bar.
+
+Key ideas:
+
+- Spawn `adb pull` with `stderr` piped.
+- Read `stderr` line-by-line and look for percent tokens (e.g., `12%`) using a regex `r"(?P<pct>\d{1,3})%"`.
+- Update an `indicatif` progress bar position with the parsed percent.
+- Provide a fallback spinner if `adb` on some devices doesn't emit percent lines; the program still waits for `adb` to exit.
+- Return `true`/`false` depending on process exit status and write a timestamped entry to the local log.
+
+Why parse `adb` stderr?
+
+- `adb pull` prints transfer progress to `stderr` (on many devices) rather than `stdout`. Parsing that gives a smooth per-file progress experience.
+
+Caveat: `adb` output is not standardized across all Android versions or vendor implementations. If your device prints carriage returns without newline or prints other text formats, you may need a byte-level parser. The current implementation covers the common case (percent values).
+
+---
+
+# The interactive flow (what the user sees)
+
+1. Start with a starting directory (default `/sdcard`).
+2. The program shows a menu:
+
+   - `[Mark Files]` — open a multi-select to mark items in the current directory (space to toggle).
+   - `[View & Pull All Marked]` — pulls all previously marked items.
+   - `[Clear Marked List]` — empties the list.
+   - `[..] Go Up` — move up a directory.
+   - `[Exit]` — quit.
+   - Then the current directory entries (folders end with `/`).
+
+3. You navigate into directories, execute `[Mark Files]` multiple times across directories, building a global marked list.
+4. Finally you choose `[View & Pull All Marked]` — the program shows an overall progress bar counting completed items plus a per-file progress bar while each `adb pull` runs.
+
+This separation (browse → mark across directories → pull) is handy when you want to construct a batch of items spread across different folders.
+
+---
+
+# Progress handling
+
+- **Per-file bar**: updated by parsing percent tokens from `adb` stderr (e.g., we match `12%`).
+- **Overall bar**: counts how many marked items have completed.
+
+Implementation summary (pseudo):
+
+```text
+for each file in marked_list:
+    start adb pull as child process (stderr piped)
+    read stderr lines -> if "NN%" found -> update per-file pb
+    when child exits, mark overall pb increment
+```
+
+Fallbacks:
+
+- If no percent values are emitted, per-file progress remains a spinner and then completes when the child exits.
+- We could extend this with a byte-level parse to handle carriage-return style progress updates if needed.
+
+---
+
+# Handling tricky cases
+
+### Filenames with spaces
+
+We call `Command::new("adb").args([...])`, passing the remote path as one argument. The OS-level argument handling ensures spaces are preserved — no shell quoting required.
+
+### Directories & recursive pulls
+
+- `adb pull` supports pulling a directory recursively (e.g., `adb pull /sdcard/DCIM ~/DCIM`).
+- When marking a directory, the CLI will call `adb pull` with the directory path; `adb` will pull its contents recursively.
+- Be mindful of large directories: the progress parser will typically report per-file progress rather than full-directory bytes.
+
+### Permissions & protected dirs
+
+- Non-rooted devices deny reads to `/data` and other protected directories.
+- If you need protected content you must root the device or use adbd with appropriate privileges — not recommended except in controlled developer contexts.
+
+---
+
+# Security considerations
+
+- **USB Debugging risks**: Keep USB debugging off when not actively using it. Authorize only trusted hosts.
+- **adb over TCP**: avoid enabling `adb` over network (unless you know exactly what you’re doing). It opens the device to remote hosts.
+- **Logs**: `adb_transfer_log.txt` contains file paths and timestamps on the host — treat it like any other log containing sensitive info.
+- **Third-party apps vs local transfer**: Third-party remote apps (AirDroid, MTP over GUI tools) may upload your files to external servers or require broad permissions. Local `adb` transfers remain on your machine and device if you prefer a minimal-privilege approach.
+
+---
+
+# Build & run
+
+Prerequisites:
+
+- Rust toolchain (rustup + cargo)
+- `adb` (Android platform-tools) installed on the Mac and accessible on `PATH`. If installed via Android SDK or Homebrew, ensure `adb` version is present.
+
+Build:
+
+```bash
+cargo build --release
+# Binary at ./target/release/adb_file_picker
+```
+
+Run:
+
+```bash
+./target/release/adb_file_picker -a /sdcard -d ~/Desktop/AndroidTransfer
+```
+
+- `-a` / `--android-path` : starting remote path (defaults to `/sdcard`).
+- `-d` / `--destination` : a destination local path on your Mac (required).
+
+---
+
+# The code (concise version)
+
+Below is the concise version illustrating the fixed filename parsing and progress logic. This is essentially the version we iterated to together — drop it into `src/main.rs` and use the `Cargo.toml` I included earlier.
+
+```rust
+
+fn adb_list_files(path: &str) -> Vec<String> {
+    // `ls -p` gives us names only; dirs end with '/'
+    let output = Command::new("adb")
+        .args(["shell", &format!("ls -p {}", path)])
+        .output()
+        .expect("Failed to run `adb shell ls`");
+
+    // Return lines trimmed as names
+    String::from_utf8_lossy(&output.stdout)
+        .lines()
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+        .collect()
+}
+
+fn pull_with_progress(src: &str, dest: &PathBuf, log_file: &mut File) -> bool {
+    let pct_re = Regex::new(r"(?P<pct>\d{1,3})%").unwrap();
+
+    let per_pb = ProgressBar::new(100);
+    per_pb.set_style(ProgressStyle::with_template("{msg} {bar:40.cyan/blue} {percent}%").unwrap());
+    per_pb.set_message(src);
+    per_pb.enable_steady_tick(Duration::from_millis(80));
+
+    let mut child = Command::new("adb")
+        .args(["pull", src, &dest.display().to_string()])
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("Failed to start adb pull");
+
+    if let Some(stderr) = child.stderr.take() {
+        let mut reader = BufReader::new(stderr);
+        let mut buf = String::new();
+        while reader.read_line(&mut buf).unwrap_or(0) != 0 {
+            let line = buf.trim();
+            if let Some(cap) = pct_re.captures(line) {
+                if let Ok(v) = cap["pct"].parse::<u64>() {
+                    per_pb.set_position(v.min(100));
+                }
+            }
+            buf.clear();
+        }
+    }
+
+    let status = child.wait().expect("adb pull wait failed");
+    per_pb.finish_and_clear();
+
+    if status.success() {
+        writeln!(log_file, "[{}] SUCCESS: {}", Local::now(), src).ok();
+        true
+    } else {
+        writeln!(log_file, "[{}] FAILED: {}", Local::now(), src).ok();
+        false
+    }
+}
+```
+
+---
+
+# Limitations & future improvements
+
+- **adb output variety**: some devices print progress via carriage returns without `%`. A more robust, byte-level stderr parser would allow better compatibility.
+- **Resumable transfers**: `adb pull` does not natively support resuming partial files. A robust approach is to transfer via tar streams.
+- **Preserving metadata**: to preserve permissions/timestamps reliably, consider running `adb shell tar -c -- <path> | tar -x -C <localdest>` (streaming a tarball) — this preserves metadata (we can add a tar-stream mode).
+- **Parallel pulls**: pull multiple small files concurrently for speed; careful with device I/O and memory.
+- **Persistent marked lists**: save marked list to JSON so you can mark today and pull later.
