@@ -6,17 +6,30 @@ meta:
   description: "How to swap out failing lead-acid batteries for a protected Lithium-ion circuit with USB-C charging."
 ---
 
+import mosquitoBat from "../../assets/mosquitoBat.png";
+import testingBeforeSoldering from "../../assets/testingBeforeSoldering.jpeg";
+import solderingHelpingHands from "../../assets/solderingHelpingHands.jpeg";
+import successfulSolder from "../../assets/successfulSolder.jpeg";
+import hotGlueToHoldTheBoard from "../../assets/hotGlueToHoldTheBoard.jpeg";
+import removingOlderChargingPortAddingNewUSBCOne from "../../assets/removingOlderChargingPortAddingNewUSBCOne.jpeg";
+import finalResult from "../../assets/finalResult.jpeg";
+import chargingRedLight from "../../assets/chargingRedLight.jpeg";
+import successfullyChargedBlueLight from "../../assets/successfullyChargedBlueLight.jpeg";
+import circuit from "../../assets/circuit.png";
+
 # {attributes.title}
 
 {attributes.date}
 
 <br />
 
+<img src={mosquitoBat} alt="mosquito bat" />
+
 If you live in a tropical climate, the handheld mosquito zapper is a household staple. However, most commercial models suffer from a fundamental engineering flaw: **the charging circuit.**
 
 Most bats use a transformer-less capacitive dropper circuit to charge a 4V sealed lead-acid (SLA) battery. There is no charge controller, no voltage cutoff, and no mercy for the chemistry inside. Leave it plugged in overnight once too often, and the battery bulges, loses capacity, and eventually dies.
 
-In this post, we’ll gut the 'dumb' electronics and replace them with a modern, protected Lithium-ion setup.
+In this post, we’ll gut the "dumb" electronics and replace them with a modern, protected Lithium-ion setup.
 
 ## The Problem: "Dumb" Charging
 
@@ -28,11 +41,11 @@ Because there is no **Charge Blocker**, the battery is subjected to constant cur
 2. **Casing Deformation:** The dreaded "bulge."
 3. **Plate Sulfation:** Permanent loss of the "zap."
 
-## The Solution: The 1S Protected Li-ion Upgrade
+## The Solution: The Protected Li-ion Upgrade
 
 We are replacing the heavy SLA block with a **3.7V 1200mAh Li-ion cell** and a **TP4056 management module**.
 
-### Bill of Materials
+### List of Materials
 
 - **Battery:** 3.7V Li-ion (14500 size or flat pack).
 - **Controller:** TP4056 Module (must be the **Protected Version** with 6 pads).
@@ -49,44 +62,99 @@ The standard TP4056 handles the **top-end** (stopping at 4.2V). However, the pro
 
 The wiring logic shifts from a serial AC-to-DC path to a parallel management path.
 
-```text
-[USB-C 5V IN]
-      │
-[TP4056 Module]
-   ├── [B+/B-]  -----> [3.7V Li-ion Cell]
-   └── [OUT+/OUT-] ----> [Zapper PCB Input]
-```
+<img src={circuit} />
 
-Warning: You must physically disconnect and remove the original AC charging pins. Never plug a modified bat into a wall socket.
+<div
+  style={{
+    background: "gainsboro",
+    padding: "1px 25px 1px 25px",
+    borderRadius: "10px",
+    fontWeight: 600,
+  }}
+>
+  _You must physically disconnect and remove the original AC charging pins.
+  Never plug a modified bat into a wall socket._
+</div>
 
 ### Implementation Steps
 
-1. Verification with a Multimeter
-   Before soldering, verify your cell's state of charge. On a 20V DC scale, a healthy lithium cell should read between 3.2V (empty) and 4.2V (full). If your meter reads 3.9V, you are at roughly 70% capacity—perfect for testing.
+1. **Verification with a Multimeter**\
+   Before soldering, verify your cell's state of charge. On a 20V DC scale, a healthy lithium cell should read between 3.2V and 4.2V. If your meter reads 3.9V, you are at roughly 70% capacity—perfect for testing.
 
-2. Bypassing the AC Stage
+2. **Bypassing the AC Stage**\
    Snip the wires leading from the flip-out AC wall pins. These are now redundant. Locate the input terminals on the zapper PCB where the old battery was connected. This is where your OUT+ and OUT- will go.
 
-3. Soldering the Management Rail
-   Solder the battery leads to the B+ and B- pads.
+3. **Soldering the Management Rail**\
+   Solder the battery leads to the B+ and B- pads. Solder the zapper PCB leads to the OUT+ and OUT- pads. Secure the TP4056 module to the handle casing using epoxy or high-temp hot glue.
 
-Solder the zapper PCB leads to the OUT+ and OUT- pads.
-
-Secure the TP4056 module to the handle casing using epoxy or high-temp hot glue.
-
-4. Calibration and Testing
+4. **Calibration and Testing**\
    Once connected, plug in the USB cable. You should see a Red LED, indicating the Constant Current phase. Once the battery hits exactly 4.2V, the Blue LED should trigger, signifying the charge blocker is active.
+
+<img src={testingBeforeSoldering} alt="testing on breadboard" />
+<div
+  id="testingBeforeSoldering"
+  style={{ textAlign: "center", marginTop: "-25px" }}
+>
+  _Testing on bread board before soldering_
+</div>
+<img src={solderingHelpingHands} alt="testing on breadboard" />
+<div
+  id="solderingHelpingHands"
+  style={{ textAlign: "center", marginTop: "-25px" }}
+>
+  _Soldering with helping hands and a magnifying glass_
+</div>
+<img src={successfulSolder} alt="testing on breadboard" />
+<div id="successfulSolder" style={{ textAlign: "center", marginTop: "-25px" }}>
+  _Successful solder of negaive (OUT -) of the board to negative (-) of the bat
+  board_
+</div>
+<img src={hotGlueToHoldTheBoard} alt="testing on breadboard" />
+<div id="hotGlueToHoldTheBoard" style={{ marginTop: "-25px" }}>
+  _Hot glue to hold the board in place of the gap below so that the USB C is
+  exposed and can be used for charging_
+</div>
+<img
+  src={removingOlderChargingPortAddingNewUSBCOne}
+  alt="testing on breadboard"
+/>
+<div
+  id="removingOlderChargingPortAddingNewUSBCOne"
+  style={{ textAlign: "center", marginTop: "-25px" }}
+>
+  _It looks like this from the outside where we once we have normal two pin
+  charging_
+</div>
+<img src={finalResult} alt="testing on breadboard" />
+<div id="finalResult" style={{ textAlign: "center", marginTop: "-25px" }}>
+  _Fully assembled bat_
+</div>
+<img src={chargingRedLight} alt="testing on breadboard" />
+<div id="chargingRedLight" style={{ textAlign: "center", marginTop: "-25px" }}>
+  _While charging the red light will glow_
+</div>
+<img src={successfullyChargedBlueLight} alt="testing on breadboard" />
+<div
+  id="successfullyChargedBlueLight"
+  style={{ textAlign: "center", marginTop: "-25px" }}
+>
+  _When fully charged the blue light will glow, after few seconds the light will
+  be turned off_
+</div>
 
 ### Performance Gains
 
 Beyond safety, the performance delta is significant:
 
-Internal Resistance: Li-ion has much lower ESR than lead-acid, allowing for a faster "dump" of energy into the transformer.
+**Internal Resistance**: Li-ion has much lower ESR than lead-acid, allowing for a faster "dump" of energy into the transformer.\
+**Weight**: The bat becomes roughly 30% lighter and better balanced.\
+**Longevity**: With proper under-voltage protection, this cell will survive 500+ charge cycles, whereas the original SLA rarely survived 50.
 
-Weight: The bat becomes roughly 30% lighter and better balanced.
+### Testing
 
-Longevity: With proper under-voltage protection, this cell will survive 500+ charge cycles, whereas the original SLA rarely survived 50.
+- Idel battery drain - Tested the discharge cycle by enabling the switch in the bats circuit board that allows current to flow from battery, in 24 hrs saw a minor 0.08 V drop. I think we don't need to turn off that switch, but will keep testing in the long run on battery drain
 
-### Conclusion
+### Future improvements
 
-By adding a simple management module, we’ve turned a disposable piece of e-waste into a reliable tool. It’s a small win for sustainability and a great weekend project for anyone looking to get started with lithium power management.
+- Using a Schottky diode to directly connect battery to bat circuit board instead of doing it through the TP4056 module
+- Adding a polyfuse in series with battery which adds another safety layer against hard shorts
