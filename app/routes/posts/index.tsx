@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/server-runtime";
 import * as rustCliForFileTransferFromAndroidToMac from "./adb-file-transfer-from-android-mac-using-rust.mdx";
+import * as dontTossThatThinSoapSliver from "./dont-toss-that-thin-soap-sliver.mdx";
 import * as md5sumInJs from "./md5sum-in-js.mdx";
 import * as mosquitoBatUpgrade from "./mosquito-bat-upgrade.mdx";
 import * as placeholdersForImages from "./placeholders-for-images.mdx";
@@ -16,6 +17,7 @@ function postsFromModule(mod: any) {
 
 export const loader: LoaderFunction = () => {
   return [
+    postsFromModule(dontTossThatThinSoapSliver),
     postsFromModule(mosquitoBatUpgrade),
     postsFromModule(rustCliForFileTransferFromAndroidToMac),
     postsFromModule(postureDetectionSystem),

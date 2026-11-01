@@ -5,7 +5,7 @@ export const Container:FC = (props) => {
     <div style={{
         fontFamily: 'system-ui, sans-serif',
         lineHeight: '1.4',
-        height: '100vh',
+        minHeight: '100vh',
       }}>{props.children}</div>
   )
 }
