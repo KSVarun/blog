@@ -1,0 +1,65 @@
+<svg width="240" height="160" style="background:#181818;border-radius:2px" viewBox="170 50 240 160" role="img" aria-label="A soap bar resting on a raised slatted rack with water dripping to the surface below" xmlns="http://www.w3.org/2000/svg">
+<style>.g{fill:none;stroke:#fff;stroke-opacity:.13;stroke-width:1}
+.ft,.fl,.fr{stroke:#f0f0f0;stroke-width:1.2;stroke-linejoin:round}
+.ft{fill:#212121}.fl{fill:#151515}.fr{fill:#1b1b1b}
+.ln{fill:none;stroke:#f0f0f0;stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round}
+.dash{fill:none;stroke:#8c8c8c;stroke-width:1;stroke-dasharray:4 4}
+.mute{fill:none;stroke:#8c8c8c;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
+.tx{fill:#a3a3a3;font-family:'Schibsted Grotesk',system-ui,sans-serif;font-size:13px}
+</style>
+<line class="g" x1="290.0" y1="105.0" x2="199.1" y2="157.5"/>
+<line class="g" x1="303.0" y1="112.5" x2="212.1" y2="165.0"/>
+<line class="g" x1="316.0" y1="120.0" x2="225.0" y2="172.5"/>
+<line class="g" x1="329.0" y1="127.5" x2="238.0" y2="180.0"/>
+<line class="g" x1="342.0" y1="135.0" x2="251.0" y2="187.5"/>
+<line class="g" x1="355.0" y1="142.5" x2="264.0" y2="195.0"/>
+<line class="g" x1="367.9" y1="150.0" x2="277.0" y2="202.5"/>
+<line class="g" x1="380.9" y1="157.5" x2="290.0" y2="210.0"/>
+<line class="g" x1="290.0" y1="105.0" x2="380.9" y2="157.5"/>
+<line class="g" x1="277.0" y1="112.5" x2="367.9" y2="165.0"/>
+<line class="g" x1="264.0" y1="120.0" x2="355.0" y2="172.5"/>
+<line class="g" x1="251.0" y1="127.5" x2="342.0" y2="180.0"/>
+<line class="g" x1="238.0" y1="135.0" x2="329.0" y2="187.5"/>
+<line class="g" x1="225.0" y1="142.5" x2="316.0" y2="195.0"/>
+<line class="g" x1="212.1" y1="150.0" x2="303.0" y2="202.5"/>
+<line class="g" x1="199.1" y1="157.5" x2="290.0" y2="210.0"/>
+<polygon class="fl" points="285.7,122.5 290.0,125.0 290.0,107.0 285.7,104.5"/>
+<polygon class="fr" points="294.3,122.5 290.0,125.0 290.0,107.0 294.3,104.5"/>
+<polygon class="ft" points="290.0,102.0 294.3,104.5 290.0,107.0 285.7,104.5"/>
+<polygon class="fl" points="342.0,155.0 346.3,157.5 346.3,139.5 342.0,137.0"/>
+<polygon class="fr" points="350.6,155.0 346.3,157.5 346.3,139.5 350.6,137.0"/>
+<polygon class="ft" points="346.3,134.5 350.6,137.0 346.3,139.5 342.0,137.0"/>
+<polygon class="fl" points="229.4,155.0 233.7,157.5 233.7,139.5 229.4,137.0"/>
+<polygon class="fr" points="238.0,155.0 233.7,157.5 233.7,139.5 238.0,137.0"/>
+<polygon class="ft" points="233.7,134.5 238.0,137.0 233.7,139.5 229.4,137.0"/>
+<polygon class="fl" points="229.4,137.0 233.7,139.5 233.7,135.5 229.4,133.0"/>
+<polygon class="fr" points="294.3,104.5 233.7,139.5 233.7,135.5 294.3,100.5"/>
+<polygon class="ft" points="290.0,98.0 294.3,100.5 233.7,135.5 229.4,133.0"/>
+<polygon class="fl" points="240.6,143.5 245.0,146.0 245.0,142.0 240.6,139.5"/>
+<polygon class="fr" points="305.6,111.0 245.0,146.0 245.0,142.0 305.6,107.0"/>
+<polygon class="ft" points="301.3,104.5 305.6,107.0 245.0,142.0 240.6,139.5"/>
+<polygon class="fl" points="251.9,150.0 256.2,152.5 256.2,148.5 251.9,146.0"/>
+<polygon class="fr" points="316.8,117.5 256.2,152.5 256.2,148.5 316.8,113.5"/>
+<polygon class="ft" points="312.5,111.0 316.8,113.5 256.2,148.5 251.9,146.0"/>
+<polygon class="fl" points="263.2,156.5 267.5,159.0 267.5,155.0 263.2,152.5"/>
+<polygon class="fr" points="328.1,124.0 267.5,159.0 267.5,155.0 328.1,120.0"/>
+<polygon class="ft" points="323.8,117.5 328.1,120.0 267.5,155.0 263.2,152.5"/>
+<polygon class="fl" points="274.4,163.0 278.7,165.5 278.7,161.5 274.4,159.0"/>
+<polygon class="fr" points="339.4,130.5 278.7,165.5 278.7,161.5 339.4,126.5"/>
+<polygon class="ft" points="335.0,124.0 339.4,126.5 278.7,161.5 274.4,159.0"/>
+<polygon class="fl" points="285.7,169.5 290.0,172.0 290.0,168.0 285.7,165.5"/>
+<polygon class="fr" points="350.6,137.0 290.0,172.0 290.0,168.0 350.6,133.0"/>
+<polygon class="ft" points="346.3,130.5 350.6,133.0 290.0,168.0 285.7,165.5"/>
+<polygon class="fl" points="236.3,125.0 303.9,164.0 303.9,150.0 236.3,111.0"/>
+<polygon class="fr" points="343.7,141.0 303.9,164.0 303.9,150.0 343.7,127.0"/>
+<polygon class="ft" points="276.1,88.0 343.7,127.0 303.9,150.0 236.3,111.0"/>
+<polygon class="ln" points="277.9,97.0 328.1,126.0 302.1,141.0 251.9,112.0"/>
+<polygon class="fl" points="285.7,187.5 290.0,190.0 290.0,172.0 285.7,169.5"/>
+<polygon class="fr" points="294.3,187.5 290.0,190.0 290.0,172.0 294.3,169.5"/>
+<polygon class="ft" points="290.0,167.0 294.3,169.5 290.0,172.0 285.7,169.5"/>
+<line class="dash" x1="249.3" y1="141.5" x2="249.3" y2="153.5"/>
+<ellipse class="dash" cx="249.3" cy="158.5" rx="7" ry="4"/>
+<line class="dash" x1="270.9" y1="154.0" x2="270.9" y2="166.0"/>
+<ellipse class="dash" cx="270.9" cy="171.0" rx="7" ry="4"/>
+<line class="dash" x1="288.3" y1="164.0" x2="288.3" y2="176.0"/>
+<ellipse class="dash" cx="288.3" cy="181.0" rx="7" ry="4"/></svg>

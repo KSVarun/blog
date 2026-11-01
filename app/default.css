@@ -1,3 +1,7 @@
+html {
+  scrollbar-gutter: stable;
+}
+
 .link {
   color: #318ce7;
   cursor: pointer;

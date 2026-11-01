@@ -1,0 +1,26 @@
+<svg width="640" height="310" style="background:#181818;border-radius:2px" viewBox="0 0 640 310" role="img" aria-label="A thin sliver hovering above a wet fresh bar, then the two joined into a single bar with a dashed seam" xmlns="http://www.w3.org/2000/svg">
+<style>.g{fill:none;stroke:#fff;stroke-opacity:.13;stroke-width:1}
+.ft,.fl,.fr{stroke:#f0f0f0;stroke-width:1.2;stroke-linejoin:round}
+.ft{fill:#212121}.fl{fill:#151515}.fr{fill:#1b1b1b}
+.ln{fill:none;stroke:#f0f0f0;stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round}
+.dash{fill:none;stroke:#8c8c8c;stroke-width:1;stroke-dasharray:4 4}
+.mute{fill:none;stroke:#8c8c8c;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
+.tx{fill:#a3a3a3;font-family:'Schibsted Grotesk',system-ui,sans-serif;font-size:13px}
+</style>
+<polygon class="fl" points="88.4,214.0 157.7,254.0 157.7,226.0 88.4,186.0"/>
+<polygon class="fr" points="199.3,230.0 157.7,254.0 157.7,226.0 199.3,202.0"/>
+<polygon class="ft" points="130.0,162.0 199.3,202.0 157.7,226.0 88.4,186.0"/>
+<ellipse class="dash" cx="138.7" cy="182.0" rx="6" ry="3.4"/>
+<ellipse class="dash" cx="143.0" cy="199.5" rx="6" ry="3.4"/>
+<ellipse class="dash" cx="169.8" cy="199.0" rx="6" ry="3.4"/>
+<line class="dash" x1="88.4" y1="186.0" x2="88.4" y2="140.0"/>
+<line class="dash" x1="157.7" y1="226.0" x2="157.7" y2="180.0"/>
+<line class="dash" x1="199.3" y1="202.0" x2="199.3" y2="156.0"/>
+<polygon class="fl" points="88.4,140.0 157.7,180.0 157.7,175.0 88.4,135.0"/>
+<polygon class="fr" points="199.3,156.0 157.7,180.0 157.7,175.0 199.3,151.0"/>
+<polygon class="ft" points="130.0,111.0 199.3,151.0 157.7,175.0 88.4,135.0"/><polygon class="fl" points="458.4,214.0 527.7,254.0 527.7,221.0 458.4,181.0"/>
+<polygon class="fr" points="569.3,230.0 527.7,254.0 527.7,221.0 569.3,197.0"/>
+<polygon class="ft" points="500.0,157.0 569.3,197.0 527.7,221.0 458.4,181.0"/>
+<polygon class="ln" points="501.7,166.0 553.7,196.0 526.0,212.0 474.0,182.0"/>
+<line class="dash" x1="458.4" y1="186.0" x2="527.7" y2="226.0"/>
+<line class="dash" x1="527.7" y1="226.0" x2="569.3" y2="202.0"/><line class="ln" x1="514" y1="108" x2="514" y2="176"/><polyline class="ln" points="510.5,168.8 514.0,176.0 517.5,168.8"/><line class="ln" x1="250" y1="190" x2="400" y2="190"/><polyline class="ln" points="392.8,193.5 400.0,190.0 392.8,186.5"/><text class="tx" x="144" y="285" text-anchor="middle">wet both surfaces</text><text class="tx" x="514" y="285" text-anchor="middle">one bar after drying</text><text class="tx" x="325" y="176" text-anchor="middle">press firmly</text></svg>

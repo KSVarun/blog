@@ -1,62 +1,16 @@
-import { useEffect, useState } from 'react';
-import { Container, Header } from '~/components';
-import profileImg from '../assets/profile-img.webp';
+import { Container, Header } from "~/components";
+import PostsIndex from "./posts/index";
+
+export { loader } from "./posts/index";
 
 export default function Index() {
-  const [showTagLine, setShowTagLine] = useState(false);
-
-  function shouldShowTagLine() {
-    const LSVal = localStorage.getItem('showTagLine') || '';
-    if (LSVal === 'true' || !LSVal) {
-      return true;
-    }
-    return false;
-  }
-
-  async function handleRemoveTagLine() {
-    localStorage.setItem('showTagLine', 'false');
-    setShowTagLine(false);
-  }
-
-  useEffect(() => {
-    const res = shouldShowTagLine();
-    setShowTagLine(res);
-  }, []);
-
   return (
     <Container>
       <Header />
-      <main className='profile-container'>
-        <section className='img-container'>
-          <img
-            src={profileImg}
-            alt='profile-img'
-            className='profile-img'
-            width='inherit'
-            height='inherit'
-          />
-        </section>
-        <section className='profile-details'>
-          <div>
-            Hello 👋, I am{' '}
-            <a
-              href='https://twitter.com/VarunKS20161856'
-              target='_blank'
-              className='link'
-            >
-              Varun
-            </a>
-          </div>
-          <aside className='tag-line-placeholder'>
-            {showTagLine ? (
-              <div onClick={handleRemoveTagLine} className='tag-line-container'>
-                <i className='tag-line'>
-                  Tag lines are overrated, click to never see me again
-                </i>
-              </div>
-            ) : null}
-          </aside>
-        </section>
+      <main className="posts-container flex justify-center md:px-6 sm:px-6">
+        <div className="prose w-full lg:prose-l py-10 prose-h1:mb-0 pt-5 prose-h2:mt-0 overflow-hidden">
+          <PostsIndex />
+        </div>
       </main>
     </Container>
   );
