@@ -32,7 +32,7 @@ export default function PostsIndex() {
       <div>
         {posts.map((post: any) => (
           <div key={post.slug}>
-            <Link to={post.slug} className="text-xl link">
+            <Link to={`/posts/${post.slug}`} className="text-xl link">
               {post.title}
             </Link>
             {post.date ? (

@@ -1059,6 +1059,11 @@ video {
   margin-bottom: 0;
 }
 
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -1067,16 +1072,36 @@ video {
   margin-bottom: 1.5rem;
 }
 
-.mr-3 {
-  margin-right: 0.75rem;
-}
-
 .mt-0 {
   margin-top: 0px;
 }
 
+.block {
+  display: block;
+}
+
 .flex {
   display: flex;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.max-w-prose {
+  max-width: 65ch;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 .justify-center {
@@ -1085,6 +1110,15 @@ video {
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .px-6 {
@@ -1105,11 +1139,6 @@ video {
   padding-top: 1.5rem;
 }
 
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -1120,12 +1149,20 @@ video {
   line-height: 1rem;
 }
 
-.font-light {
-  font-weight: 300;
+.focus-visible\:outline:focus-visible {
+  outline-style: solid;
 }
 
-.font-semibold {
-  font-weight: 600;
+.focus-visible\:outline-2:focus-visible {
+  outline-width: 2px;
+}
+
+.focus-visible\:outline-offset-4:focus-visible {
+  outline-offset: 4px;
+}
+
+.focus-visible\:outline-blue-500:focus-visible {
+  outline-color: #3b82f6;
 }
 
 .prose-h1\:mb-0 :is(:where(h1):not(:where([class~="not-prose"],[class~="not-prose"] *))) {
