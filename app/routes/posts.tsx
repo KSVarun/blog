@@ -1,7 +1,24 @@
 import { Outlet } from "@remix-run/react";
-import { LinksFunction } from "@remix-run/server-runtime";
+import {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/server-runtime";
 import styles from "highlight.js/styles/github-dark-dimmed.css";
 import { Container, Header } from "~/components";
+import { posts } from "~/models/posts.server";
+import { getSocialMeta } from "~/social-meta";
+
+export const loader: LoaderFunction = () => posts;
+
+export const meta: MetaFunction = ({ data, location }) => {
+  const pathname = location.pathname.replace(/\/+$/, "");
+  const post = data?.find(
+    (post: { slug: string }) => pathname === `/posts/${post.slug}`
+  );
+
+  return post ? getSocialMeta({ ...post, pathname, type: "article" }) : {};
+};
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];

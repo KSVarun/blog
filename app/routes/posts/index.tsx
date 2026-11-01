@@ -1,30 +1,8 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/server-runtime";
-import * as rustCliForFileTransferFromAndroidToMac from "./adb-file-transfer-from-android-mac-using-rust.mdx";
-import * as dontTossThatThinSoapSliver from "./dont-toss-that-thin-soap-sliver.mdx";
-import * as md5sumInJs from "./md5sum-in-js.mdx";
-import * as mosquitoBatUpgrade from "./mosquito-bat-upgrade.mdx";
-import * as placeholdersForImages from "./placeholders-for-images.mdx";
-import * as postureDetectionSystem from "./posture-detection-system.mdx";
+import { posts } from "~/models/posts.server";
 
-function postsFromModule(mod: any) {
-  return {
-    slug: mod.filename.replace(/\.mdx?$/, ""),
-    ...mod.attributes.meta,
-    date: mod.attributes.date,
-  };
-}
-
-export const loader: LoaderFunction = () => {
-  return [
-    postsFromModule(dontTossThatThinSoapSliver),
-    postsFromModule(mosquitoBatUpgrade),
-    postsFromModule(rustCliForFileTransferFromAndroidToMac),
-    postsFromModule(postureDetectionSystem),
-    postsFromModule(md5sumInJs),
-    postsFromModule(placeholdersForImages),
-  ];
-};
+export const loader: LoaderFunction = () => posts;
 
 export default function PostsIndex() {
   const posts = useLoaderData();
