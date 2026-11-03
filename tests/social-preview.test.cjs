@@ -11,14 +11,22 @@ function decode(value) {
   }[entity]));
 }
 
-async function render(url) {
+async function request(url) {
   let html = "";
   const response = new Writable({
     write(chunk, encoding, done) { html += chunk.toString(); done(); },
   });
-  response.writeHead = (status) => { response.statusCode = status; };
+  response.writeHead = (status, statusText, headers) => {
+    response.statusCode = status;
+    response.headers = headers;
+  };
   await handler({ method: "GET", headers: { host: "localhost" }, url }, response);
-  assert.equal(response.statusCode, 200, url);
+  return { html, status: response.statusCode, headers: response.headers };
+}
+
+async function render(url) {
+  const { html, status } = await request(url);
+  assert.equal(status, 200, url);
 
   const head = html.match(/<head>(.*?)<\/head>/s)[1];
   const meta = new Map();
@@ -67,13 +75,30 @@ for (const file of fs.readdirSync(path.join(__dirname, "../app/routes/posts"))) 
   });
 }
 
-for (const pathname of ["/", "/posts"]) {
-  test(`${pathname} has a website preview`, async () => {
-    const page = await render(pathname);
-    checkPreview(page, pathname, "website");
-    assert.equal(page.meta.get("og:title"), "A blog by Varun KS");
+test("/ has a website preview", async () => {
+  const page = await render("/");
+  checkPreview(page, "/", "website");
+  assert.equal(page.meta.get("og:title"), "A blog by Varun KS");
+});
+
+for (const pathname of ["/posts", "/posts/", "/posts?utm_source=shared"]) {
+  test(`${pathname} permanently redirects to the canonical blog list`, async () => {
+    const response = await request(pathname);
+    assert.equal(response.status, 301);
+    assert.deepEqual(response.headers.location, ["/"]);
   });
 }
+
+test("the homepage lists every post and the Blog link points home", async () => {
+  const { html } = await render("/");
+  assert.match(html, /<a[^>]*href="\/"[^>]*>Blog<\/a>/);
+  assert(!html.includes('href="/posts"'));
+  for (const file of fs.readdirSync(path.join(__dirname, "../app/routes/posts"))) {
+    if (file.endsWith(".mdx")) {
+      assert(html.includes(`href="/posts/${file.replace(/\.mdx$/, "")}"`), file);
+    }
+  }
+});
 
 test("tracking parameters and trailing slashes use the clean canonical URL", async () => {
   const pathname = "/posts/dont-toss-that-thin-soap-sliver";
