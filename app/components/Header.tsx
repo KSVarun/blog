@@ -6,7 +6,8 @@ export function Header() {
     <header className="sticky top-0 z-10 bg-white px-6 pb-4 pt-6">
       <div className="mx-auto flex max-w-prose items-center justify-between">
         <Link
-          to="/posts"
+          to="/"
+          reloadDocument
           style={{ color: "#318ce7", fontSize: 16, fontWeight: 700, textDecoration: "none" }}
           className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
         >
