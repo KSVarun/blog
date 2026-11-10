@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import type { PropsWithChildren } from 'react'
 
-export const Container:FC = (props) => {
+export const Container = (props: PropsWithChildren) => {
   return (
     <div style={{
         fontFamily: 'system-ui, sans-serif',

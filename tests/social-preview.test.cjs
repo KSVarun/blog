@@ -1,9 +1,9 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const { Writable } = require("node:stream");
 const { test } = require("node:test");
-const handler = require("../api/index.js").default;
+const { createRequestHandler } = require("@remix-run/node");
+const handler = createRequestHandler(require("../build/index.js"), "production");
 
 function decode(value) {
   return value.replace(/&(?:amp|quot|#x27|#39|lt|gt);/g, (entity) => ({
@@ -12,16 +12,8 @@ function decode(value) {
 }
 
 async function request(url) {
-  let html = "";
-  const response = new Writable({
-    write(chunk, encoding, done) { html += chunk.toString(); done(); },
-  });
-  response.writeHead = (status, statusText, headers) => {
-    response.statusCode = status;
-    response.headers = headers;
-  };
-  await handler({ method: "GET", headers: { host: "localhost" }, url }, response);
-  return { html, status: response.statusCode, headers: response.headers };
+  const response = await handler(new Request(new URL(url, "http://localhost")));
+  return { html: await response.text(), status: response.status, headers: response.headers };
 }
 
 async function render(url) {
@@ -85,7 +77,7 @@ for (const pathname of ["/posts", "/posts/", "/posts?utm_source=shared"]) {
   test(`${pathname} permanently redirects to the canonical blog list`, async () => {
     const response = await request(pathname);
     assert.equal(response.status, 301);
-    assert.deepEqual(response.headers.location, ["/"]);
+    assert.equal(response.headers.get("location"), "/");
   });
 }
 
