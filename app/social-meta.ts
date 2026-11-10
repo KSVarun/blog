@@ -25,21 +25,21 @@ export function getSocialMeta({
 }: SocialMetaOptions) {
   const imageUrl = new URL(image, SITE_URL).href;
 
-  return {
-    title,
-    description,
-    "og:site_name": "A blog by Varun KS",
-    "og:type": type,
-    "og:url": getCanonicalUrl(pathname),
-    "og:title": title,
-    "og:description": description,
-    "og:image": imageUrl,
-    "og:image:alt": imageAlt,
-    "twitter:card": "summary_large_image",
-    "twitter:creator": "@VarunKS20161856",
-    "twitter:title": title,
-    "twitter:description": description,
-    "twitter:image": imageUrl,
-    "twitter:image:alt": imageAlt,
-  };
+  return [
+    { title },
+    { name: "description", content: description },
+    { property: "og:site_name", content: "A blog by Varun KS" },
+    { property: "og:type", content: type },
+    { property: "og:url", content: getCanonicalUrl(pathname) },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: imageUrl },
+    { property: "og:image:alt", content: imageAlt },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:creator", content: "@VarunKS20161856" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: imageUrl },
+    { name: "twitter:image:alt", content: imageAlt },
+  ];
 }

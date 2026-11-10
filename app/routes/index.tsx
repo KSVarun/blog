@@ -1,18 +1,17 @@
 import { Link, useLoaderData } from "@remix-run/react";
-import { LoaderFunction } from "@remix-run/server-runtime";
 import { posts } from "~/models/posts.server";
 
-export const loader: LoaderFunction = () => posts;
+export const loader = () => posts;
 
 export default function Index() {
-  const posts = useLoaderData();
+  const posts = useLoaderData<typeof loader>();
 
   return (
     <main className="posts-container flex justify-center md:px-6 sm:px-6">
       <div className="prose dark:prose-invert w-full lg:prose-l py-10 prose-h1:mb-0 pt-5 prose-h2:mt-0 overflow-hidden">
         <div>
           <div>
-            {posts.map((post: any) => (
+            {posts.map((post) => (
               <div key={post.slug}>
                 {/* Native history avoids showing the old post while back-navigation loaders run. */}
                 <Link to={`/posts/${post.slug}`} reloadDocument className="text-xl link">

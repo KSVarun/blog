@@ -12,7 +12,8 @@ import postureImage from "../assets/posture-sit-straight.png";
 interface PostModule {
   filename: string;
   attributes: {
-    meta: { title: string; description: string };
+    title: string;
+    description: string;
     date: string;
   };
 }
@@ -20,7 +21,8 @@ interface PostModule {
 function postFromModule(mod: PostModule, image?: string, imageAlt?: string) {
   return {
     slug: mod.filename.replace(/\.mdx?$/, ""),
-    ...mod.attributes.meta,
+    title: mod.attributes.title,
+    description: mod.attributes.description,
     date: mod.attributes.date,
     image,
     imageAlt,

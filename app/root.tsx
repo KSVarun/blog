@@ -7,7 +7,7 @@ import {
   ScrollRestoration,
   useLocation,
 } from "@remix-run/react";
-import { LinksFunction, MetaFunction } from "@remix-run/server-runtime";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { useEffect } from "react";
 import defaultStyles from "./default.css";
 import indexStyles from "./index.css";
@@ -35,11 +35,8 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: MetaFunction = ({ location }) => ({
-  charset: "utf-8",
-  viewport: "width=device-width, initial-scale=1",
-  ...getSocialMeta({ pathname: location.pathname }),
-});
+export const meta: MetaFunction = ({ location }) =>
+  getSocialMeta({ pathname: location.pathname });
 
 export default function App() {
   const location = useLocation();
@@ -59,6 +56,8 @@ export default function App() {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <link rel="canonical" href={getCanonicalUrl(location.pathname)} />
         <Links />
