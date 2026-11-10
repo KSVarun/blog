@@ -14,6 +14,12 @@ import indexStyles from "./index.css";
 import postStyles from "./posts.css";
 import { getCanonicalUrl, getSocialMeta } from "./social-meta";
 import styles from "./tailwind.css";
+import { Container, Header } from "./components";
+declare global {
+  interface Window {
+    dataLayer: any;
+  }
+}
 declare global {
   interface Window {
     dataLayer: any;
@@ -73,7 +79,10 @@ export default function App() {
         <script></script>
       </head>
       <body className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-        <Outlet />
+        <Container>
+          <Header />
+          <Outlet />
+        </Container>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

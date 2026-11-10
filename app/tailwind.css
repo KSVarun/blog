@@ -1059,8 +1059,20 @@ video {
   margin-bottom: 0;
 }
 
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
 .sticky {
   position: sticky;
+}
+
+.inset-0 {
+  inset: 0px;
 }
 
 .top-0 {
@@ -1098,6 +1110,10 @@ video {
 
 .flex {
   display: flex;
+}
+
+.hidden {
+  display: none;
 }
 
 .h-10 {
@@ -1262,6 +1278,14 @@ video {
 
 .prose-h2\:mt-0 :is(:where(h2):not(:where([class~="not-prose"],[class~="not-prose"] *))) {
   margin-top: 0px;
+}
+
+.dark\:block:is(.dark *) {
+  display: block;
+}
+
+.dark\:hidden:is(.dark *) {
+  display: none;
 }
 
 .dark\:bg-slate-900:is(.dark *) {
