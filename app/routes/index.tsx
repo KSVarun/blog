@@ -12,7 +12,7 @@ export default function Index() {
     <Container>
       <Header />
       <main className="posts-container flex justify-center md:px-6 sm:px-6">
-        <div className="prose w-full lg:prose-l py-10 prose-h1:mb-0 pt-5 prose-h2:mt-0 overflow-hidden">
+        <div className="prose dark:prose-invert w-full lg:prose-l py-10 prose-h1:mb-0 pt-5 prose-h2:mt-0 overflow-hidden">
           <div>
             <div>
               {posts.map((post: any) => (

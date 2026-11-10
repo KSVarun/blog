@@ -12,8 +12,8 @@ import { useEffect } from "react";
 import defaultStyles from "./default.css";
 import indexStyles from "./index.css";
 import postStyles from "./posts.css";
-import styles from "./tailwind.css";
 import { getCanonicalUrl, getSocialMeta } from "./social-meta";
+import styles from "./tailwind.css";
 declare global {
   interface Window {
     dataLayer: any;
@@ -51,18 +51,28 @@ export default function App() {
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <Meta />
         <link rel="canonical" href={getCanonicalUrl(location.pathname)} />
         <Links />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.classList.add(theme);
+              })()
+            `,
+          }}
+        />
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-9PRELERZXT"
         ></script>
         <script></script>
       </head>
-      <body>
+      <body className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
